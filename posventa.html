@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NELYESS - Panel Posventa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-page: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --color-tickets: #FF6B6B;
+            --color-transacciones: #4D96FF;
+            --color-regulatorios: #9D4EDD;
+            --color-adicionales: #06D6A0;
+            --color-garantia: #FCA311;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-page); color: var(--text-main); padding: 20px; }
+
+        .header-nav {
+            max-width: 1400px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) { .grid-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .grid-container { grid-template-columns: repeat(4, 1fr); } }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-top: 6px solid #ccc;
+        }
+
+        .card.tickets { border-color: var(--color-tickets); }
+        .card.garantia { border-color: var(--color-garantia); }
+        .card.transacciones { border-color: var(--color-transacciones); }
+        .card.regulatorios { border-color: var(--color-regulatorios); }
+        .card.adicionales { border-color: var(--color-adicionales); }
+
+        .card-header { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #edf2f7; padding-bottom: 10px; font-weight: bold; }
+        
+        .btn-list, .btn-grid { display: flex; flex-direction: column; gap: 8px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        @media (min-width: 768px) { .btn-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+        .btn-tickets { background-color: var(--color-tickets); }
+        .btn-garantia { background-color: var(--color-garantia); }
+        .btn-transacciones { background-color: var(--color-transacciones); }
+        .btn-regulatorios { background-color: var(--color-regulatorios); }
+        .btn-adicionales { background-color: var(--color-adicionales); }
+
+        .column-group { display: flex; flex-direction: column; gap: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-nav">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+    </div>
+
+    <div class="grid-container">
+
+        <div class="column-group">
+            <div class="card tickets">
+                <div class="card-header" style="color: var(--color-tickets);"><i class="fa-solid fa-ticket"></i> TICKETS</div>
+                <div class="btn-list">
+                    <a href="#" class="action-btn btn-tickets">Gestión de tickets</a>
+                    <a href="#" class="action-btn btn-tickets">Ticket de contingencia</a>
+                    <a href="#" class="action-btn btn-tickets">Requerimientos mínimos</a>
+                </div>
+            </div>
+            <div class="card garantia">
+                <div class="card-header" style="color: var(--color-garantia);"><i class="fa-solid fa-shield-halved"></i> GARANTÍA</div>
+                <div class="btn-list">
+                    <a href="#" class="action-btn btn-garantia">Proceso de Garantía</a>
+                    <a href="#" class="action-btn btn-garantia">Descartes Técnica</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card transacciones">
+            <div class="card-header" style="color: var(--color-transacciones);"><i class="fa-solid fa-money-bill-transfer"></i> TRANSACCIONES</div>
+            <div class="btn-grid">
+                <a href="#" class="action-btn btn-transacciones">RUC 20</a>
+                <a href="#" class="action-btn btn-transacciones">Recup. Línea</a>
+                <a href="#" class="action-btn btn-transacciones">Roaming</a>
+                <a href="#" class="action-btn btn-transacciones">Titularidad</a>
+                <a href="#" class="action-btn btn-transacciones">Validar IMEI</a>
+                <a href="#" class="action-btn btn-transacciones">Esim Config</a>
+                <a href="#" class="action-btn btn-transacciones">Baja Línea</a>
+                <a href="#" class="action-btn btn-transacciones">Carta Adeudo</a>
+            </div>
+        </div>
+
+        <div class="card regulatorios">
+            <div class="card-header" style="color: var(--color-regulatorios);"><i class="fa-solid fa-scale-balanced"></i> REGULATORIOS</div>
+            <div class="btn-list">
+                <a href="#" class="action-btn btn-regulatorios">Calidad de Servicio</a>
+                <a href="#" class="action-btn btn-regulatorios">Gestión de Reclamos</a>
+                <a href="#" class="action-btn btn-regulatorios">Libro Reclamaciones</a>
+                <a href="#" class="action-btn btn-regulatorios">Derecho ARCO</a>
+                <a href="#" class="action-btn btn-regulatorios">Devolución Dinero</a>
+            </div>
+        </div>
+
+        <div class="card adicionales">
+            <div class="card-header" style="color: var(--color-adicionales);"><i class="fa-solid fa-puzzle-piece"></i> ADICIONALES</div>
+            <div class="btn-list">
+                <a href="#" class="action-btn btn-adicionales">Acceso Bypass</a>
+                <a href="#" class="action-btn btn-adicionales">Casos SGU</a>
+                <a href="#" class="action-btn btn-adicionales">Herramientas Apoyo</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
