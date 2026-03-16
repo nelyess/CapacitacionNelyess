@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Capacitación Interna</title>
+    <style>
+        :root { --blue: #003366; --gold: #f1c40f; --light: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--light); }
+        header { background: var(--blue); color: white; padding: 2rem; text-align: center; }
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
+        
+        /* Tarjetas de Capacitación */
+        .course-card {
+            background: white;
+            border-left: 5px solid var(--gold);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .course-card:hover { transform: translateY(-5px); }
+        .tag { background: #e1e8ed; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
+        .btn-open { background: var(--blue); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Centro de Capacitación y Recursos</h1>
+    <p>Acceso exclusivo para personal autorizado</p>
+</header>
+
+<div class="container">
+    <h2>Módulos Disponibles</h2>
+
+    <div class="course-card">
+        <span class="tag">NUEVO</span>
+        <h3>1. Introducción al Puesto y Seguridad</h3>
+        <p>Video de bienvenida y protocolos básicos de seguridad en el área de trabajo.</p>
+        <a href="https://youtube.com/tu-link-aqui" target="_blank" class="btn-open">Ver Video</a>
+    </div>
+
+    <div class="course-card">
+        <span class="tag">MANUAL</span>
+        <h3>2. Manejo de Herramientas y Equipos</h3>
+        <p>Documento PDF con el paso a paso del mantenimiento preventivo.</p>
+        <a href="enlace-a-tu-pdf.pdf" class="btn-open">Descargar Manual</a>
+    </div>
+
+    </div>
+
+</body>
+</html>
