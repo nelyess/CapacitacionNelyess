@@ -68,7 +68,7 @@
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 35px 20px;
+            padding: 40px 20px;
             border-radius: 20px;
             color: white;
             text-decoration: none;
@@ -91,90 +91,10 @@
 
         .btn-card i { font-size: 2.5rem; }
 
-        /* NUBE FLOTANTE (CHAT) */
-        .chat-cloud {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 280px;
-            height: 380px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 1000;
-            border: 1px solid #e2e8f0;
-        }
-
-        .chat-header {
-            background: var(--primary);
-            color: white;
-            padding: 12px;
-            font-weight: 600;
-            text-align: center;
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        #chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            font-size: 0.8rem;
-            background: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .message {
-            background: #e2e8f0;
-            padding: 8px 12px;
-            border-radius: 12px;
-            width: fit-content;
-            max-width: 90%;
-            word-wrap: break-word;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 10px;
-            background: white;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .chat-input input {
-            flex: 1;
-            border: 1px solid #e2e8f0;
-            padding: 8px 15px;
-            border-radius: 20px;
-            outline: none;
-            font-size: 0.8rem;
-        }
-
-        .chat-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            margin-left: 5px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .chat-btn:hover { background: var(--secondary); }
-
         /* Ajustes para móviles */
         @media (max-width: 600px) {
             .hero h1 { font-size: 2.2rem; }
-            .grid-buttons { grid-template-columns: 1fr 1fr; } /* 2 columnas en móvil */
-            .chat-cloud { width: 220px; height: 300px; bottom: 15px; right: 15px; }
+            .grid-buttons { grid-template-columns: 1fr 1fr; } /* Mantiene 2 columnas en móvil */
         }
     </style>
 </head>
@@ -188,12 +108,12 @@
         <p>Portal operativo centralizado para el equipo comercial y de soporte</p>
 
         <div class="grid-buttons">
-            <a href="#guia" class="btn-card">
+            <a href="guia-comercial.html" class="btn-card">
                 <i class="fas fa-book-open"></i>
                 <span>GUÍA COMERCIAL</span>
             </a>
             
-            <a href="#ventas" class="btn-card">
+            <a href="ventas.html" class="btn-card">
                 <i class="fas fa-chart-line"></i>
                 <span>VENTAS</span>
             </a>
@@ -203,54 +123,12 @@
                 <span>POSVENTA</span>
             </a>
             
-            <a href="#haylli" class="btn-card">
+            <a href="haylli-erp.html" class="btn-card">
                 <i class="fas fa-laptop-code"></i>
                 <span>HAYLLI ERP</span>
             </a>
         </div>
     </section>
-
-    <div class="chat-cloud" id="chat">
-        <div class="chat-header">
-            <i class="fas fa-comments"></i> Nube Grupal Nelyess
-        </div>
-        <div id="chat-messages">
-            <div class="message">¡Bienvenido al equipo! 👋</div>
-            <div class="message">Selecciona un área para ver los procesos.</div>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Escribe un mensaje...">
-            <button class="chat-btn" onclick="sendMessage()">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-    </div>
-
-    <script>
-        function sendMessage() {
-            const input = document.getElementById('user-input');
-            const container = document.getElementById('chat-messages');
-            if (input.value.trim() !== "") {
-                const msg = document.createElement('div');
-                msg.className = 'message';
-                // Estilo para el mensaje del usuario actual
-                msg.style.background = '#004a99';
-                msg.style.color = 'white';
-                msg.style.alignSelf = 'flex-end';
-                msg.textContent = input.value;
-                container.appendChild(msg);
-                input.value = "";
-                container.scrollTop = container.scrollHeight;
-            }
-        }
-
-        // Permitir enviar con la tecla Enter
-        document.getElementById('user-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    </script>
 
 </body>
 </html>
