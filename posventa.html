@@ -15,6 +15,7 @@
             --color-regulatorios: #9D4EDD;
             --color-adicionales: #06D6A0;
             --color-garantia: #FCA311;
+            --primary-blue: #004a99;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,15 +30,21 @@
 
         .btn-back {
             text-decoration: none;
-            color: var(--text-main);
+            color: white;
             font-weight: bold;
             display: flex;
             align-items: center;
             gap: 10px;
-            background: white;
+            background: var(--primary-blue);
             padding: 10px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            filter: brightness(1.2);
+            transform: translateX(-5px);
         }
 
         .grid-container {
@@ -88,7 +95,7 @@
             transition: 0.3s;
         }
 
-        .action-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .action-btn:hover { transform: translateY(-3px); filter: brightness(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
         .btn-tickets { background-color: var(--color-tickets); }
         .btn-garantia { background-color: var(--color-garantia); }
@@ -102,7 +109,7 @@
 <body>
 
     <div class="header-nav">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER AL INICIO</a>
     </div>
 
     <div class="grid-container">
@@ -111,16 +118,16 @@
             <div class="card tickets">
                 <div class="card-header" style="color: var(--color-tickets);"><i class="fa-solid fa-ticket"></i> TICKETS</div>
                 <div class="btn-list">
-                    <a href="#" class="action-btn btn-tickets">Gestión de tickets</a>
-                    <a href="#" class="action-btn btn-tickets">Ticket de contingencia</a>
-                    <a href="#" class="action-btn btn-tickets">Requerimientos mínimos</a>
+                    <a href="gestion-tickets.html" class="action-btn btn-tickets">Gestión de tickets</a>
+                    <a href="ticket-contingencia.html" class="action-btn btn-tickets">Ticket de contingencia</a>
+                    <a href="requerimientos.html" class="action-btn btn-tickets">Requerimientos mínimos</a>
                 </div>
             </div>
             <div class="card garantia">
                 <div class="card-header" style="color: var(--color-garantia);"><i class="fa-solid fa-shield-halved"></i> GARANTÍA</div>
                 <div class="btn-list">
-                    <a href="#" class="action-btn btn-garantia">Proceso de Garantía</a>
-                    <a href="#" class="action-btn btn-garantia">Descartes Técnica</a>
+                    <a href="proceso-garantia.html" class="action-btn btn-garantia">Proceso de Garantía</a>
+                    <a href="descartes.html" class="action-btn btn-garantia">Descartes Técnica</a>
                 </div>
             </div>
         </div>
@@ -128,34 +135,35 @@
         <div class="card transacciones">
             <div class="card-header" style="color: var(--color-transacciones);"><i class="fa-solid fa-money-bill-transfer"></i> TRANSACCIONES</div>
             <div class="btn-grid">
-                <a href="#" class="action-btn btn-transacciones">RUC 20</a>
-                <a href="#" class="action-btn btn-transacciones">Recup. Línea</a>
-                <a href="#" class="action-btn btn-transacciones">Roaming</a>
-                <a href="#" class="action-btn btn-transacciones">Titularidad</a>
-                <a href="#" class="action-btn btn-transacciones">Validar IMEI</a>
-                <a href="#" class="action-btn btn-transacciones">Esim Config</a>
-                <a href="#" class="action-btn btn-transacciones">Baja Línea</a>
-                <a href="#" class="action-btn btn-transacciones">Carta Adeudo</a>
+                <a href="ruc20.html" class="action-btn btn-transacciones">RUC 20</a>
+                <a href="recuperacion.html" class="action-btn btn-transacciones">Recup. Línea</a>
+                <a href="roaming.html" class="action-btn btn-transacciones">Roaming</a>
+                <a href="titularidad.html" class="action-btn btn-transacciones">Titularidad</a>
+                <a href="validar-imei.html" class="action-btn btn-transacciones">Validar IMEI</a>
+                <a href="esim.html" class="action-btn btn-transacciones">Esim Config</a>
+                <a href="baja.html" class="action-btn btn-transacciones">Baja Línea</a>
+                <a href="carta-adeudo.html" class="action-btn btn-transacciones">Carta Adeudo</a>
             </div>
         </div>
 
         <div class="card regulatorios">
             <div class="card-header" style="color: var(--color-regulatorios);"><i class="fa-solid fa-scale-balanced"></i> REGULATORIOS</div>
             <div class="btn-list">
-                <a href="#" class="action-btn btn-regulatorios">Calidad de Servicio</a>
-                <a href="#" class="action-btn btn-regulatorios">Gestión de Reclamos</a>
-                <a href="#" class="action-btn btn-regulatorios">Libro Reclamaciones</a>
-                <a href="#" class="action-btn btn-regulatorios">Derecho ARCO</a>
-                <a href="#" class="action-btn btn-regulatorios">Devolución Dinero</a>
+                <a href="calidad-servicio.html" class="action-btn btn-regulatorios">Calidad de Servicio</a>
+                
+                <a href="reclamos.html" class="action-btn btn-regulatorios">Gestión de Reclamos</a>
+                <a href="libro-reclamaciones.html" class="action-btn btn-regulatorios">Libro Reclamaciones</a>
+                <a href="derecho-arco.html" class="action-btn btn-regulatorios">Derecho ARCO</a>
+                <a href="devolucion.html" class="action-btn btn-regulatorios">Devolución Dinero</a>
             </div>
         </div>
 
         <div class="card adicionales">
             <div class="card-header" style="color: var(--color-adicionales);"><i class="fa-solid fa-puzzle-piece"></i> ADICIONALES</div>
             <div class="btn-list">
-                <a href="#" class="action-btn btn-adicionales">Acceso Bypass</a>
-                <a href="#" class="action-btn btn-adicionales">Casos SGU</a>
-                <a href="#" class="action-btn btn-adicionales">Herramientas Apoyo</a>
+                <a href="bypass.html" class="action-btn btn-adicionales">Acceso Bypass</a>
+                <a href="sgu.html" class="action-btn btn-adicionales">Casos SGU</a>
+                <a href="herramientas.html" class="action-btn btn-adicionales">Herramientas Apoyo</a>
             </div>
         </div>
 
