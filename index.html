@@ -3,40 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NELYESS - Inicio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>NELYESS - Centro de Capacitación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         :root {
-            --primary: #004a99; /* Azul corporativo */
-            --accent: #f39c12;  /* Dorado/Naranja para botones */
-            --light: #ffffff;
-            --bg: #f4f7f6;
+            --primary: #004a99;
+            --secondary: #00c6ff;
+            --dark: #1e293b;
+            --white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: #333; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; color: var(--dark); overflow-x: hidden; }
 
-        /* Navegación */
-        nav {
-            background: var(--primary);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .logo { font-size: 1.8rem; font-weight: 700; letter-spacing: 2px; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-weight: 400; }
-
-        /* Hero Section (Bienvenida) */
+        /* PORTADA PRINCIPAL */
         .hero {
-            height: 60vh;
-            background: linear-gradient(rgba(0,74,153,0.8), rgba(0,74,153,0.8)), 
-                        url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80');
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0,74,153,0.9), rgba(0,198,255,0.8)), 
+                        url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -47,92 +32,185 @@
             color: white;
             padding: 20px;
         }
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
-        .hero p { font-size: 1.2rem; max-width: 600px; margin-bottom: 25px; }
 
-        /* Secciones de Contenido */
-        .container { padding: 50px 8%; }
-        .section-title { text-align: center; margin-bottom: 40px; color: var(--primary); font-size: 2rem; }
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+        }
 
-        .services-grid {
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* CONTENEDOR DE BOTONES (APARTADOS) */
+        .grid-buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
         }
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            border-top: 5px solid var(--accent);
-        }
-        .card:hover { transform: translateY(-10px); }
-        .card h3 { color: var(--primary); margin-bottom: 15px; }
-        
         .btn-card {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            border-radius: 20px;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-card:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-card i { font-size: 2.5rem; }
+
+        /* NUBE FLOTANTE (CHAT INTERACTIVO) */
+        .chat-cloud {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            border: 1px solid #ddd;
+        }
+
+        .chat-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            text-align: center;
             font-size: 0.9rem;
         }
 
-        footer {
-            background: #222;
+        #chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            background: #f9f9f9;
+        }
+
+        .message {
+            background: #e1e8ed;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            width: fit-content;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chat-btn {
+            background: var(--primary);
             color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 50px;
+            border: none;
+            padding: 8px 15px;
+            margin-left: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Estilo para celulares */
+        @media (max-width: 600px) {
+            .chat-cloud { width: 250px; height: 350px; right: 15px; bottom: 15px; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">NELYESS</div>
-        <div class="nav-links">
-            <a href="#">Inicio</a>
-            <a href="#capacitaciones">Capacitaciones</a>
-            <a href="#contacto">Contacto</a>
-        </div>
-    </nav>
+    <section class="hero">
+        <h1>NELYESS CAPACITACIÓN</h1>
+        <p>Selecciona un área para comenzar tu formación profesional</p>
 
-    <header class="hero">
-        <h1>Bienvenidos a NELYESS</h1>
-        <p>Soluciones integrales y capacitación técnica de alto nivel para tu desarrollo profesional.</p>
-        <a href="#capacitaciones" style="background: var(--accent); color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600;">Ver Módulos</a>
-    </header>
-
-    <section class="container" id="capacitaciones">
-        <h2 class="section-title">Nuestros Servicios</h2>
-        <div class="services-grid">
-            <div class="card">
-                <h3>Capacitación Técnica</h3>
-                <p>Cursos especializados diseñados para fortalecer las habilidades del personal operativo y administrativo.</p>
-                <a href="#" class="btn-card">Saber más</a>
-            </div>
-            <div class="card">
-                <h3>Gestión de Calidad</h3>
-                <p>Implementación de procesos eficientes para asegurar la excelencia en cada nivel de tu organización.</p>
-                <a href="#" class="btn-card">Saber más</a>
-            </div>
-            <div class="card">
-                <h3>Seguridad Industrial</h3>
-                <p>Protocolos actualizados y formación en prevención de riesgos para un entorno laboral seguro.</p>
-                <a href="#" class="btn-card">Saber más</a>
-            </div>
+        <div class="grid-buttons">
+            <a href="#guia" class="btn-card">
+                <span>📘</span>
+                GUÍA COMERCIAL
+            </a>
+            <a href="#ventas" class="btn-card">
+                <span>💰</span>
+                VENTAS
+            </a>
+            <a href="#posventa" class="btn-card">
+                <span>🛠️</span>
+                POSVENTA
+            </a>
+            <a href="#haylli" class="btn-card">
+                <span>🚀</span>
+                HAYLLI ERP
+            </a>
         </div>
     </section>
 
-    <footer id="contacto">
-        <p>&copy; 2026 NELYESS. Todos los derechos reservados.</p>
-        <p style="font-size: 0.8rem; margin-top: 10px; color: #aaa;">Ayacucho, Perú</p>
-    </footer>
+    <div class="chat-cloud" id="chat">
+        <div class="chat-header">☁️ Nube de Interacción Grupal</div>
+        <div id="chat-messages">
+            <div class="message">¡Bienvenidos al portal de Nelyess!</div>
+            <div class="message">Usa este espacio para consultas rápidas.</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Escribe algo...">
+            <button class="chat-btn" onclick="sendMessage()">Envi.</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const container = document.getElementById('chat-messages');
+            if (input.value.trim() !== "") {
+                const msg = document.createElement('div');
+                msg.className = 'message';
+                msg.style.background = '#004a99';
+                msg.style.color = 'white';
+                msg.style.alignSelf = 'flex-end';
+                msg.textContent = input.value;
+                container.appendChild(msg);
+                input.value = "";
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+    </script>
 
 </body>
 </html>
