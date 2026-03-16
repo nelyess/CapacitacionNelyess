@@ -3,53 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NELYESS - Panel Posventa</title>
+    <title>NELYESS - Portal Operativo Multiplataforma</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-page: #f0f2f5;
+            --bg-page: #f4f7fa;
             --bg-card: #ffffff;
             --text-main: #2d3748;
+            --primary-blue: #004a99;
+            
+            /* Colores originales de tus categorías */
             --color-tickets: #FF6B6B;
             --color-transacciones: #4D96FF;
             --color-regulatorios: #9D4EDD;
             --color-adicionales: #06D6A0;
             --color-garantia: #FCA311;
-            --primary-blue: #004a99;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-page); color: var(--text-main); padding: 20px; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
 
-        .header-nav {
+        /* Cabecera Superior */
+        .top-bar {
             max-width: 1400px;
-            margin: 0 auto 20px auto;
+            margin: 0 auto 30px auto;
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            background: var(--primary-blue);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            color: white;
         }
 
         .btn-back {
             text-decoration: none;
             color: white;
-            font-weight: bold;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-            background: var(--primary-blue);
-            padding: 10px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
 
-        .btn-back:hover {
-            filter: brightness(1.2);
-            transform: translateX(-5px);
-        }
+        .btn-back:hover { transform: translateX(-5px); opacity: 0.8; }
 
+        /* Contenedor Principal */
         .grid-container {
             display: grid;
-            gap: 20px;
+            gap: 25px;
             grid-template-columns: 1fr;
             max-width: 1400px;
             margin: 0 auto;
@@ -58,112 +68,186 @@
         @media (min-width: 768px) { .grid-container { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1200px) { .grid-container { grid-template-columns: repeat(4, 1fr); } }
 
+        /* Estilo de Tarjetas */
         .card {
             background-color: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            border-top: 6px solid #ccc;
+            gap: 18px;
+            border-top: 8px solid #ccc;
+            transition: transform 0.3s ease;
         }
 
+        .card:hover { transform: translateY(-5px); }
+
+        /* Bordes por categoría (Tus títulos originales) */
         .card.tickets { border-color: var(--color-tickets); }
         .card.garantia { border-color: var(--color-garantia); }
         .card.transacciones { border-color: var(--color-transacciones); }
         .card.regulatorios { border-color: var(--color-regulatorios); }
         .card.adicionales { border-color: var(--color-adicionales); }
 
-        .card-header { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #edf2f7; padding-bottom: 10px; font-weight: bold; }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .card-header i { font-size: 1.5rem; }
+        .card-header h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; }
+
+        /* Listas de Botones */
+        .btn-list { display: flex; flex-direction: column; gap: 10px; }
         
-        .btn-list, .btn-grid { display: flex; flex-direction: column; gap: 8px; }
-        .btn-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        /* Grid para Transacciones */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
         @media (min-width: 768px) { .btn-grid { grid-template-columns: repeat(2, 1fr); } }
 
+        /* Botones de Acción */
         .action-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 10px;
             text-decoration: none;
             color: white;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.85rem;
             text-align: center;
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .action-btn:hover { transform: translateY(-3px); filter: brightness(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
+        /* Colores de Botones según tu esquema original */
         .btn-tickets { background-color: var(--color-tickets); }
         .btn-garantia { background-color: var(--color-garantia); }
         .btn-transacciones { background-color: var(--color-transacciones); }
         .btn-regulatorios { background-color: var(--color-regulatorios); }
         .btn-adicionales { background-color: var(--color-adicionales); }
 
-        .column-group { display: flex; flex-direction: column; gap: 20px; }
+        .column-group { display: flex; flex-direction: column; gap: 25px; }
+
     </style>
 </head>
 <body>
 
-    <div class="header-nav">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER AL INICIO</a>
+    <div class="top-bar">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> INICIO</a>
+        <div style="font-weight: 800; letter-spacing: 2px;">PANEL POSVENTA</div>
     </div>
 
     <div class="grid-container">
 
         <div class="column-group">
             <div class="card tickets">
-                <div class="card-header" style="color: var(--color-tickets);"><i class="fa-solid fa-ticket"></i> TICKETS</div>
+                <div class="card-header" style="color: var(--color-tickets);">
+                    <i class="fa-solid fa-ticket"></i>
+                    <h2>TICKETS</h2>
+                </div>
                 <div class="btn-list">
-                    <a href="gestion-tickets.html" class="action-btn btn-tickets">Gestión de tickets</a>
-                    <a href="ticket-contingencia.html" class="action-btn btn-tickets">Ticket de contingencia</a>
-                    <a href="requerimientos.html" class="action-btn btn-tickets">Requerimientos mínimos</a>
+                    <a href="#" class="action-btn btn-tickets">Gestión de tickets</a>
+                    <a href="#" class="action-btn btn-tickets">Ticket de contingencia</a>
+                    <a href="#" class="action-btn btn-tickets">Requerimientos mínimos</a>
+                    <a href="#" class="action-btn btn-tickets">Guía de auditoría</a>
                 </div>
             </div>
+
             <div class="card garantia">
-                <div class="card-header" style="color: var(--color-garantia);"><i class="fa-solid fa-shield-halved"></i> GARANTÍA</div>
+                <div class="card-header" style="color: var(--color-garantia);">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h2>GARANTÍA</h2>
+                </div>
                 <div class="btn-list">
-                    <a href="proceso-garantia.html" class="action-btn btn-garantia">Proceso de Garantía</a>
-                    <a href="descartes.html" class="action-btn btn-garantia">Descartes Técnica</a>
+                    <a href="#" class="action-btn btn-garantia">Proceso de Garantía</a>
+                </div>
+            </div>
+
+            <div class="card garantia">
+                <div class="card-header" style="color: var(--color-garantia);">
+                    <i class="fa-solid fa-wrench"></i>
+                    <h2>DESCARTES</h2>
+                </div>
+                <div class="btn-list">
+                    <a href="#" class="action-btn btn-garantia">Descartes</a>
                 </div>
             </div>
         </div>
 
         <div class="card transacciones">
-            <div class="card-header" style="color: var(--color-transacciones);"><i class="fa-solid fa-money-bill-transfer"></i> TRANSACCIONES</div>
+            <div class="card-header" style="color: var(--color-transacciones);">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+                <h2>TRANSACCIONES</h2>
+            </div>
             <div class="btn-grid">
-                <a href="ruc20.html" class="action-btn btn-transacciones">RUC 20</a>
-                <a href="recuperacion.html" class="action-btn btn-transacciones">Recup. Línea</a>
-                <a href="roaming.html" class="action-btn btn-transacciones">Roaming</a>
-                <a href="titularidad.html" class="action-btn btn-transacciones">Titularidad</a>
-                <a href="validar-imei.html" class="action-btn btn-transacciones">Validar IMEI</a>
-                <a href="esim.html" class="action-btn btn-transacciones">Esim Config</a>
-                <a href="baja.html" class="action-btn btn-transacciones">Baja Línea</a>
-                <a href="carta-adeudo.html" class="action-btn btn-transacciones">Carta Adeudo</a>
+                <a href="#" class="action-btn btn-transacciones">Registro cliente RUC 20</a>
+                <a href="#" class="action-btn btn-transacciones">Recuperación de línea</a>
+                <a href="#" class="action-btn btn-transacciones">Roaming</a>
+                <a href="#" class="action-btn btn-transacciones">Cambio de titularidad</a>
+                <a href="#" class="action-btn btn-transacciones">Validación de IMEI</a>
+                <a href="#" class="action-btn btn-transacciones">Consulta de titularidad</a>
+                <a href="#" class="action-btn btn-transacciones">Suspensión Temporal</a>
+                <a href="#" class="action-btn btn-transacciones">Detalle consumo</a>
+                <a href="#" class="action-btn btn-transacciones">Reposición de SIM / ESIM</a>
+                <a href="#" class="action-btn btn-transacciones">Cambio de número</a>
+                <a href="#" class="action-btn btn-transacciones">Cancelación de línea</a>
+                <a href="#" class="action-btn btn-transacciones">Carta no adeudo</a>
+                <a href="#" class="action-btn btn-transacciones">Bloqueo y desbloqueo</a>
+                <a href="#" class="action-btn btn-transacciones">Contraseña única</a>
+                <a href="#" class="action-btn btn-transacciones">Reactivación de línea</a>
+                <a href="#" class="action-btn btn-transacciones">Redondeo pagos</a>
+                <a href="#" class="action-btn btn-transacciones" style="grid-column: 1 / -1;">Configuración Esim</a>
             </div>
         </div>
 
         <div class="card regulatorios">
-            <div class="card-header" style="color: var(--color-regulatorios);"><i class="fa-solid fa-scale-balanced"></i> REGULATORIOS</div>
+            <div class="card-header" style="color: var(--color-regulatorios);">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <h2>REGULATORIOS</h2>
+            </div>
             <div class="btn-list">
-                <a href="calidad-servicio.html" class="action-btn btn-regulatorios">Calidad de Servicio</a>
-                
-                <a href="reclamos.html" class="action-btn btn-regulatorios">Gestión de Reclamos</a>
-                <a href="libro-reclamaciones.html" class="action-btn btn-regulatorios">Libro Reclamaciones</a>
-                <a href="derecho-arco.html" class="action-btn btn-regulatorios">Derecho ARCO</a>
-                <a href="devolucion.html" class="action-btn btn-regulatorios">Devolución Dinero</a>
+                <a href="calidad-servicio.html" class="action-btn btn-regulatorios">Calidad</a>
+                <a href="#" class="action-btn btn-regulatorios">Reclamo</a>
+                <a href="#" class="action-btn btn-regulatorios">Recurso impugnatorio</a>
+                <a href="#" class="action-btn btn-regulatorios">Expediente Virtual</a>
+                <a href="#" class="action-btn btn-regulatorios">Libro de reclamaciones</a>
+                <a href="#" class="action-btn btn-regulatorios">Cuestionamiento bloqueo</a>
+                <a href="#" class="action-btn btn-regulatorios">Derecho Arco</a>
+                <a href="#" class="action-btn btn-regulatorios">Copia expediente reclamos</a>
+                <a href="#" class="action-btn btn-regulatorios">Copia exp. reclamaciones</a>
+                <a href="#" class="action-btn btn-regulatorios">Devolución de dinero</a>
+                <a href="#" class="action-btn btn-regulatorios">Incumplimiento de resolución</a>
             </div>
         </div>
 
         <div class="card adicionales">
-            <div class="card-header" style="color: var(--color-adicionales);"><i class="fa-solid fa-puzzle-piece"></i> ADICIONALES</div>
+            <div class="card-header" style="color: var(--color-adicionales);">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                <h2>ADICIONALES</h2>
+            </div>
             <div class="btn-list">
-                <a href="bypass.html" class="action-btn btn-adicionales">Acceso Bypass</a>
-                <a href="sgu.html" class="action-btn btn-adicionales">Casos SGU</a>
-                <a href="herramientas.html" class="action-btn btn-adicionales">Herramientas Apoyo</a>
+                <a href="#" class="action-btn btn-adicionales">Bypass</a>
+                <a href="#" class="action-btn btn-adicionales">Casos 9018</a>
+                <a href="#" class="action-btn btn-adicionales">Casos SGU</a>
+                <a href="#" class="action-btn btn-adicionales">SAR</a>
+                <a href="#" class="action-btn btn-adicionales">Devolución Dinero</a>
+                <a href="#" class="action-btn btn-adicionales">Incumplimiento resolución</a>
+                <a href="#" class="action-btn btn-adicionales">Herramientas de apoyo</a>
             </div>
         </div>
 
