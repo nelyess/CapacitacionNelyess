@@ -3,167 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NELYESS - Calidad y Averías</title>
+    <title>NELYESS - Calidad de Servicio Completo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #004a99;
             --forest: #3A5A40;
             --salvia: #A3B18A;
-            --bg: #f0f2f5;
+            --cream: #F9FBF7;
+            --text: #2D3A30;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Verdana, Arial, sans-serif; background-color: var(--bg); color: #2D3A30; line-height: 1.5; }
+        body { font-family: Verdana, Arial, sans-serif; background-color: #f0f2f5; color: var(--text); line-height: 1.5; }
 
         /* Navegación */
-        .nav-header { background: var(--primary); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        nav { background: var(--primary); padding: 15px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
         .btn-back { color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+        .nav-title { color: white; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
 
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; background: white; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* Tarjetas de Información */
-        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 6px solid var(--forest); }
-        h2 { color: var(--forest); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 2px solid var(--salvia); padding-bottom: 10px; text-transform: uppercase; }
+        /* Separadores de Secciones */
+        .seccion-bloque { margin-bottom: 60px; padding-bottom: 40px; border-bottom: 2px dashed var(--salvia); }
+        .seccion-bloque:last-child { border-bottom: none; }
 
-        /* Estilo de Listas e Info */
-        .info-item { margin-bottom: 15px; text-align: justify; }
-        .info-item strong { color: var(--forest); }
+        /* Estilos heredados de tus archivos originales (Respetando tu estructura) */
+        .section-header-wrapper { position: relative; align-self: flex-start; margin-bottom: 20px; }
+        .section-header-bg { position: absolute; background-color: var(--salvia); border-radius: 20px; bottom: -4px; left: 5px; right: -10px; top: 4px; z-index: 1; }
+        .section-header-text { position: relative; background-color: var(--forest); color: #ffffff; padding: 12px 30px; border-radius: 0 25px 25px 0; font-size: 20px; font-weight: 700; z-index: 2; margin-left: -20px; display: inline-block; }
+
+        .info-list { display: flex; flex-direction: column; gap: 14px; font-size: 16px; margin: 20px 0; text-align: justify; }
+        .info-list strong { color: var(--forest); }
 
         /* Diagrama de Flujo */
-        .flowchart { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
-        .step-box { background: #F9FBF7; border: 1px solid #CCD5AE; padding: 15px; border-radius: 8px; text-align: center; font-size: 0.85rem; }
-
-        /* Imágenes Zoomables */
-        .img-box { text-align: center; margin: 20px 0; background: #eee; padding: 10px; border-radius: 8px; }
-        .img-box img { max-width: 100%; border-radius: 5px; cursor: zoom-in; transition: 0.3s; }
-        .img-box img:hover { transform: scale(1.01); }
+        .flowchart { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 20px 0; }
+        .step-box { background-color: var(--cream); border: 1px solid #CCD5AE; padding: 20px; text-align: center; border-radius: 6px; font-size: 14px; }
 
         /* Tabla de Estados */
-        .table-res { overflow-x: auto; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 700px; }
-        th { background: var(--salvia); padding: 12px; border: 1px solid #CCD5AE; }
-        td { padding: 12px; border: 1px solid #E1E8D5; font-size: 0.85rem; }
+        .table-responsive { width: 100%; overflow-x: auto; border: 1px solid #CCD5AE; border-radius: 8px; margin-top: 10px; }
+        .status-table { width: 100%; border-collapse: collapse; min-width: 700px; background: white; }
+        .status-table th { background-color: var(--salvia); padding: 15px; border-bottom: 2px solid var(--forest); }
+        .status-table td { padding: 15px; border-bottom: 1px solid #E1E8D5; font-size: 14px; }
 
-        /* Plantilla Interactiva */
-        .plantilla-card { background: #F9FBF7; border: 2px solid var(--salvia); border-radius: 10px; padding: 20px; }
-        .campo { display: flex; flex-direction: column; margin-bottom: 10px; }
-        .campo label { font-size: 0.8rem; font-weight: bold; color: var(--forest); margin-bottom: 4px; }
-        input, textarea { padding: 8px; border: 1px solid var(--salvia); border-radius: 4px; font-family: inherit; }
+        /* Plantilla BCCS (Tu formulario completo) */
+        .plantilla-card { background: var(--cream); border: 1px solid #CCD5AE; border-radius: 15px; padding: 30px; }
+        .linea-campo { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid #F0F2E8; }
+        .etiqueta { font-size: 13.5px; font-weight: 700; color: var(--forest); }
+        input, textarea { flex: 1; min-width: 250px; border: none; border-bottom: 1px solid var(--salvia); padding: 5px; font-size: 14px; outline: none; background: transparent; }
+        
+        .btn-group { margin-top: 25px; display: flex; gap: 15px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-copy { background-color: var(--forest); color: white; }
+        .btn-clear { background-color: #E9EDC9; color: var(--forest); }
 
-        .btn-copy { background: var(--forest); color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-copy:hover { background: #4a6d51; }
+        /* Imágenes Zoom */
+        .image-box { border: 1px solid #CCD5AE; border-radius: 8px; overflow: hidden; margin: 20px 0; text-align: center; }
+        .image-box img { max-width: 100%; cursor: zoom-in; transition: 0.3s; }
 
         /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
-        .modal img { max-width: 95%; max-height: 95%; }
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        .modal-content { max-width: 95%; max-height: 95%; object-fit: contain; }
+
+        @media (max-width: 768px) { .flowchart { grid-template-columns: 1fr; } .linea-campo { flex-direction: column; } }
     </style>
 </head>
 <body>
 
-    <nav class="nav-header">
-        <a href="posventa.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER A POSVENTA</a>
-        <span>NELYESS - GESTIÓN DE CALIDAD</span>
-    </nav>
+<nav>
+    <a href="posventa.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER A POSVENTA</a>
+    <div class="nav-title">Gestión de Calidad y Averías - Nelyess</div>
+</nav>
 
-    <div class="container">
+<div class="container">
 
-        <div class="card">
-            <h2>Condiciones Generales</h2>
-            <div class="info-item"><strong>¿Qué es?:</strong> Procedimiento previo al reclamo de calidad de primera instancia que inicia un usuario cuando desee reportar problemas con la calidad del servicio.</div>
-            <div class="info-item"><strong>¿Cuándo aplica?:</strong> Cuando el usuario desee reportar cualquier problema con la calidad del servicio.</div>
-            <div class="info-item"><strong>¿Qué deberá realizar el agente?:</strong> Registrar el reporte en el BCCS y emitir una constancia con el código asignado.</div>
-            <div class="info-item"><strong>Plazo de atención:</strong> 1 día calendario (urbano), 2 días (rural), +1 día si no se encontró al usuario.</div>
-            
-            <div class="flowchart">
-                <div class="step-box"><strong>1.</strong> Detección del inconveniente.</div>
-                <div class="step-box"><strong>2.</strong> Validación de datos y servicio.</div>
-                <div class="step-box"><strong>3.</strong> Realización de descartes básicos.</div>
-                <div class="step-box"><strong>4.</strong> Acceso a reporte en BCCS.</div>
-                <div class="step-box"><strong>5.</strong> Completar información requerida.</div>
-                <div class="step-box"><strong>6.</strong> Envío de constancia vía SMS.</div>
-            </div>
+    <div class="seccion-bloque">
+        <div class="section-header-wrapper">
+            <div class="section-header-bg"></div>
+            <div class="section-header-text">CONDICIONES GENERALES</div>
         </div>
-
-        <div class="card">
-            <h2>Requisitos Canal Presencial</h2>
-            <div class="info-item"><strong>1.</strong> Nombres y apellidos completos o razón social.</div>
-            <div class="info-item"><strong>2.</strong> Documento de identidad (DNI, CE, Pasaporte o RUC). Representantes deben llevar poder.</div>
-            <div class="info-item"><strong>3.</strong> Número o código de servicio afectado.</div>
-            <div class="info-item"><strong>4.</strong> Datos de contacto: Número telefónico y Correo electrónico.</div>
-            <div class="info-item"><strong>5.</strong> Dirección detallada: Ubigeo, centro poblado, distrito, provincia y dpto.</div>
-            <div class="info-item"><strong>6.</strong> Ubicación georreferenciada: Coordenadas (longitud y latitud).</div>
-            <div class="info-item"><strong>7.</strong> Detalle del problema.</div>
-            <div class="info-item"><strong>8.</strong> Fecha y hora aproximada de inicio.</div>
+        <div class="info-list">
+            <p><strong>¿Qué es?:</strong> Procedimiento previo al reclamo de calidad de primera instancia que inicia un usuario cuando desee reportar problemas con la calidad del servicio.</p>
+            <p><strong>¿Cuándo aplica?:</strong> Cuando el usuario desee reportar cualquier problema con la calidad del servicio.</p>
+            <p><strong>¿Qué deberá realizar el agente?:</strong> En estos casos, se deberá registrar el reporte en el BCCS y se emitirá una constancia con el código asignado.</p>
+            <p><strong>¿Cuál es el plazo de atención?:</strong> 1 día calendario, 2 días calendario para servicios fijos instalados en centros poblados rurales, + 1 día calendario adicional cuando el usuario no se hubiera encontrado durante la visita y no se hubiera solucionado.</p>
         </div>
-
-        <div class="card">
-            <h2>Registro en BCCS</h2>
-            <div class="info-item"><strong>Ruta:</strong> Reclamo – Reclamo por avería – Seleccionar tipo de servicio – Avería – Elegir problema.</div>
-            <div class="img-box"><img src="https://i.postimg.cc/9FsYZSG4/Captura-de-pantalla-2026-03-06-150800.png" onclick="zoom(this)"></div>
-            <div class="info-item">Completar la información del reclamante (Titular, usuario o representante).</div>
-            <div class="img-box"><img src="https://i.postimg.cc/BQFK9vK9/Captura-de-pantalla-2026-03-06-151136.png" onclick="zoom(this)"></div>
-            <div class="info-item">Para campos de <strong>coordenadas y centro poblado</strong>, presionar "Select", ingresar datos, presionar "Search" y seleccionar.</div>
-            <div class="img-box"><img src="https://i.postimg.cc/XJpwZSs1/Captura-de-pantalla-2026-03-06-155407.png" onclick="zoom(this)"></div>
+        <div class="flowchart">
+            <div class="step-box"><strong>1.</strong> Detección del inconveniente (debe estar versado a problemas de calidad del servicio).</div>
+            <div class="step-box"><strong>2.</strong> Detección del tipo de servicio y validación de datos.</div>
+            <div class="step-box"><strong>3.</strong> Realización de descartes básicos identificando que el problema no sea del equipo.</div>
+            <div class="step-box"><strong>4.</strong> Acceso a la opción de reporte del BCCS (en el servicio problema).</div>
+            <div class="step-box"><strong>5.</strong> Completar la información requerida por el BCCS.</div>
+            <div class="step-box"><strong>6.</strong> El sistema enviará la constancia vía SMS.</div>
         </div>
-
-        <div class="card">
-            <h2>Plantilla de Registro</h2>
-            <div style="background: #fff3cd; padding: 10px; border-radius: 5px; font-size: 0.8rem; margin-bottom: 15px;">
-                Indicar al cliente: "En caso su reporte sea elevado a reclamo, ¿Por qué medio le gustaría recibir respuesta: Físico o virtual?"
-            </div>
-            <form id="averiaForm" class="plantilla-card">
-                <div class="campo"><label>Supervisor aprobador:</label><input type="text" id="c1" placeholder="Nombre del agente"></div>
-                <div class="campo"><label>Acreditó condición:</label><input type="text" id="c2" placeholder="SI / NO"></div>
-                <div class="campo"><label>Dirección:</label><input type="text" id="c3" placeholder="Referencias, dist, prov, dpto"></div>
-                <div class="campo"><label>Coordenadas:</label><input type="text" id="c4" placeholder="Latitud, Longitud"></div>
-                <div class="campo"><label>Indicador Cobertura:</label><input type="text" id="c5" placeholder="Barras en el teléfono"></div>
-                <div class="campo"><label>Reinició equipo:</label><input type="text" id="c7" placeholder="SI / NO"></div>
-                <div class="campo"><label>Detalle problema:</label><textarea id="c13" rows="3"></textarea></div>
-                
-                <button type="button" class="btn-copy" onclick="copyFull()">COPIAR PLANTILLA PARA BCCS</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h2>Estados y Consultas</h2>
-            <div class="info-item">Validar el estado ubicando la tipificación después de los (###).</div>
-            <div class="img-box"><img src="https://i.postimg.cc/vmMyHGZV/Captura-de-pantalla-2026-03-06-161226.png" onclick="zoom(this)"></div>
-            
-            <div class="table-res">
-                <table>
-                    <tr><th>Estado</th><th>Información al Cliente</th></tr>
-                    <tr><td>Intento de comunicación</td><td>Se intentó comunicar. Revisar Subscriber History para próxima fecha de SMS.</td></tr>
-                    <tr><td>Configuraciones en servicio</td><td>Se hicieron ajustes. Validar si el problema persiste.</td></tr>
-                    <tr><td>Visita técnica programada</td><td>Informar fecha y hora. Si desea reprogramar, debe ser dentro de las 24-48h.</td></tr>
-                    <tr><td>Elevado a reclamo</td><td>Informar que mantiene el mismo código y los plazos de resolución (3 días hábiles).</td></tr>
-                </table>
-            </div>
-            <div class="img-box"><img src="https://i.postimg.cc/6QGZwLqj/Captura-de-pantalla-2026-03-06-160630.png" onclick="zoom(this)"></div>
-        </div>
-
     </div>
 
-    <div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg"></div>
+    <div class="seccion-bloque">
+        <div class="section-header-wrapper">
+            <div class="section-header-bg"></div>
+            <div class="section-header-text">REGISTRO DE REPORTE - PLANTILLA BCCS</div>
+        </div>
+        <div style="background: #F1F5E9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px solid #CCD5AE; font-size: 13px;">
+            <p>• Para completar estos campos, se le indicará al cliente: "En caso su reporte de avería sea elevado a un reclamo, ¿Por qué medio de notificación le gustaría recibir su respuesta: Físico o virtual?"</p>
+            <p>• El correo electrónico y la dirección solicitada en estos campos se empleará para la etapa de elevación a un reclamo en caso suceda.</p>
+        </div>
+        <div class="image-box">
+            <img src="https://i.postimg.cc/nhJC8bBs/Captura-de-pantalla-2026-03-06-153844.png" onclick="openModal(this.src)" alt="Guía BCCS">
+        </div>
+        <div class="plantilla-card">
+            <form id="averiaForm">
+                <div class="linea-campo"><span class="etiqueta">• Jefe/Supervisor aprobador del reporte:</span><input type="text" id="c1" placeholder="nombre del agente"></div>
+                <div class="linea-campo"><span class="etiqueta">• Acreditó condición:</span><input type="text" id="c2" placeholder="SI / NO"></div>
+                <div class="linea-campo"><span class="etiqueta">• Dirección donde presenta los inconvenientes:</span><input type="text" id="c3" placeholder="referencias, Urb, centro poblado, dist, prov, dpto"></div>
+                <div class="linea-campo"><span class="etiqueta">• Ubicación georreferenciada (Coordenadas):</span><input type="text" id="c4" placeholder="Latitud, Longitud"></div>
+                <div class="linea-campo"><span class="etiqueta">• Indicador de Cobertura:</span><input type="text" id="c5" placeholder="barra de cobertura"></div>
+                <div class="linea-campo"><span class="etiqueta">• Mensaje de Error:</span><input type="text" id="c6" placeholder="si lo hubiera"></div>
+                <div class="linea-campo"><span class="etiqueta">• Reinicio su equipo:</span><input type="text" id="c7" placeholder="SI / NO"></div>
+                <div class="linea-campo"><span class="etiqueta">• Cuenta con otra línea con incidencia:</span><input type="text" id="c8" placeholder="Número adicional o Ninguna"></div>
+                <div class="linea-campo"><span class="etiqueta">• Equipo adquirido en Bitel:</span><input type="text" id="c9" placeholder="SI / NO"></div>
+                <div class="linea-campo"><span class="etiqueta">• Sistema operativo del Dispositivo:</span><input type="text" id="c10" placeholder="Ej: Android 13"></div>
+                <div class="linea-campo"><span class="etiqueta">• Cantidad de KB vigente:</span><input type="text" id="c11" placeholder="Saldo OCS o Plan Ilimitado"></div>
+                <div class="linea-campo"><span class="etiqueta">• ¿Chip probado en otro equipo?:</span><input type="text" id="c12" placeholder="SI / NO"></div>
+                <div class="linea-campo"><span class="etiqueta">• Detalle del problema:</span><textarea id="c13" rows="3"></textarea></div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-copy" onclick="copyAction()">Copiar Plantilla</button>
+                    <button type="button" class="btn btn-clear" onclick="document.getElementById('averiaForm').reset()">Limpiar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <script>
-        function zoom(img) { document.getElementById('modal').style.display='flex'; document.getElementById('modalImg').src=img.src; }
-        
-        function copyFull() {
-            let fields = [
-                "Supervisor aprobador: ", "Acreditó condición: ", "Dirección: ", "Coordenadas: ",
-                "Cobertura: ", "Reinició equipo: ", "Detalle: "
-            ];
-            let ids = ['c1', 'c2', 'c3', 'c4', 'c5', 'c7', 'c13'];
-            let text = "REPORTE DE AVERÍA BCCS\n";
-            ids.forEach((id, i) => { text += "• " + fields[i] + document.getElementById(id).value + "\n"; });
-            
-            const area = document.createElement("textarea");
-            area.value = text; document.body.appendChild(area);
-            area.select(); document.execCommand("copy");
-            document.body.removeChild(area);
-            alert("¡Plantilla copiada!");
+    <div class="seccion-bloque">
+        <div class="section-header-wrapper">
+            <div class="section-header-bg"></div>
+            <div class="section-header-text">REQUISITOS CANAL PRESENCIAL</div>
+        </div>
+        <div class="info-list">
+            <p><strong>1.</strong> Nombres y apellidos completos del usuario o razón de social del Reclamante.</p>
+            <p><strong>2.</strong> Tipo y número del documento legal (DNI, C.E., Pasaporte o RUC). En representantes consignar poder.</p>
+            <p><strong>3.</strong> Número o código de servicio afectado.</p>
+            <p><strong>4.</strong> Datos de contacto (Teléfono y correo electrónico).</p>
+            <p><strong>5.</strong> Dirección exacta (ubigeo, dpto, prov, dist, centro poblado).</p>
+            <p><strong>6.</strong> Ubicación georreferenciada (Coordenadas geográficas).</p>
+            <p><strong>7.</strong> Detalle del problema.</p>
+            <p><strong>8.</strong> Fecha y hora de inicio aproximada del problema.</p>
+        </div>
+    </div>
+
+    <div class="seccion-bloque">
+        <div class="section-header-wrapper">
+            <div class="section-header-bg"></div>
+            <div class="section-header-text">RUTAS Y PROCEDIMIENTOS BCCS</div>
+        </div>
+        <p class="info-list">Ruta: <strong>Reclamo – Reclamo por avería – Seleccionar servicio – Avería – Elegir problema.</strong></p>
+        <div class="image-box"><img src="https://i.postimg.cc/9FsYZSG4/Captura-de-pantalla-2026-03-06-150800.png" onclick="openModal(this.src)"></div>
+        <p class="info-list">Completar campos de <strong>longitud y latitud</strong> presionando "select" y buscando el centro poblado.</p>
+        <div class="image-box"><img src="https://i.postimg.cc/XJpwZSs1/Captura-de-pantalla-2026-03-06-155407.png" onclick="openModal(this.src)"></div>
+        <p class="info-list"><strong>Entrega de Código:</strong> Una vez generado, mencionar plazos y brindar código enviado por SMS.</p>
+        <div class="image-box"><img src="https://i.postimg.cc/pXD1Vzhh/Captura-de-pantalla-2026-03-06-160259.png" onclick="openModal(this.src)"></div>
+    </div>
+
+    <div class="seccion-bloque">
+        <div class="section-header-wrapper">
+            <div class="section-header-bg"></div>
+            <div class="section-header-text">ESTADOS DE REPORTES</div>
+        </div>
+        <div class="table-responsive">
+            <table class="status-table">
+                <thead><tr><th>Estado</th><th>Información</th></tr></thead>
+                <tbody>
+                    <tr><td>Intento de comunicación para revisión</td><td>Revisar Historia del Suscriptor (Subscriber History) para fecha/hora de comunicación.</td></tr>
+                    <tr><td>Configuraciones en el servicio</td><td>Validar con el cliente si el problema persiste o fue solucionado.</td></tr>
+                    <tr><td>Visita técnica programada</td><td>Revisar fecha y hora en Subscriber History. Reprogramación dentro de 24h (Urbano) o 48h (Rural).</td></tr>
+                    <tr><td>Visita técnica realizada – No se encontró</td><td>Indicar fecha/hora de próxima visita en documento dejado. Reprogramación dentro de 24h.</td></tr>
+                    <tr><td>Reporte se elevo a reclamo</td><td>Mismo código, plazo de resolución 03 días hábiles + 5 para notificación.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="image-box" style="margin-top: 20px;">
+            <img src="https://i.postimg.cc/vmMyHGZV/Captura-de-pantalla-2026-03-06-161226.png" onclick="openModal(this.src)">
+        </div>
+    </div>
+
+</div>
+
+<div id="zoomModal" class="modal" onclick="closeModal()">
+    <span style="position:fixed; top:20px; right:30px; color:white; font-size:40px; cursor:pointer;">&times;</span>
+    <img class="modal-content" id="fullImg">
+</div>
+
+<script>
+    function copyAction() {
+        const labels = [
+            "• Jefe/Supervisor aprobador:", "• Acreditó condición:", "• Dirección:", 
+            "• Coordenadas:", "• Cobertura:", "• Mensaje Error:", "• Reinicio equipo:",
+            "• Otra línea:", "• Equipo Bitel:", "• Sistema Operativo:", "• KB Vigente:",
+            "• Chip en otro equipo:", "• Detalle del problema:"
+        ];
+        let finalText = "PLANTILLA REPORTE AVERÍA\n";
+        for(let i=1; i<=13; i++) {
+            const val = document.getElementById('c'+i).value;
+            finalText += `${labels[i-1]} ${val}\n`;
         }
-    </script>
+        const area = document.createElement("textarea");
+        area.value = finalText; document.body.appendChild(area);
+        area.select(); document.execCommand("copy");
+        document.body.removeChild(area);
+        alert("¡Plantilla completa copiada!");
+    }
+
+    function openModal(src) {
+        document.getElementById("zoomModal").style.display = "flex";
+        document.getElementById("fullImg").src = src;
+    }
+    function closeModal() { document.getElementById("zoomModal").style.display = "none"; }
+</script>
+
 </body>
 </html>
