@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Casos 9018 - Nelyess</title>
+    <title>Sistema de Plantillas 9018 - Nelyess</title>
     <style>
         :root {
-            --primary-color: #00bcd4;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
+            --primary: #00bcd4;
+            --bg: #000000;
+            --card: #111111;
+            --btn-bg: #1a1a1a;
+            --text: #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-color);
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
             padding: 20px;
             display: flex;
@@ -25,180 +26,310 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
+            max-width: 1000px;
+            background: var(--card);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            min-height: 80vh;
         }
 
-        h1 { color: var(--primary-color); text-align: center; }
+        h1 { color: var(--primary); text-align: center; margin-bottom: 30px; text-transform: uppercase; }
 
-        .selector-group { margin-bottom: 25px; }
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: var(--primary);
+        }
 
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-color); }
+        /* Estilo de los Botones de Selección */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-        select, input, textarea {
+        .btn-option {
+            background: var(--btn-bg);
+            border: 1px solid #444;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-option:hover {
+            border-color: var(--primary);
+            background: #222;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.2);
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* Formulario */
+        .template-card {
+            background: #0a0a0a;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .instruction {
+            color: #aaa;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .field-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        input, textarea {
             width: 100%;
             padding: 12px;
-            margin-bottom: 15px;
+            background: #1a1a1a;
             border: 1px solid #333;
-            border-radius: 8px;
-            background: #252525;
             color: white;
+            border-radius: 5px;
             box-sizing: border-box;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
-        .full-width { grid-column: span 2; }
-
-        button {
-            background-color: var(--primary-color);
+        .btn-copy {
+            background: var(--primary);
             color: black;
             border: none;
             padding: 15px 30px;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 5px;
             font-weight: bold;
+            cursor: pointer;
             width: 100%;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        button:hover { background-color: #00acc1; transform: translateY(-2px); }
-
-        #output-area {
             margin-top: 20px;
-            padding: 15px;
-            background: #111;
-            border-left: 5px solid var(--primary-color);
-            white-space: pre-wrap;
-            display: none;
+            text-transform: uppercase;
         }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📝 Plantillas Caso 9018</h1>
+    <h1>Centro de Gestión 9018</h1>
     
-    <div class="selector-group">
-        <label for="templateSelector">Selecciona el tipo de incidencia:</label>
-        <select id="templateSelector" onchange="generateForm()">
-            <option value="">-- Seleccione una opción --</option>
-            <option value="general">Plantilla General</option>
-            <option value="ajuste">Ajuste de Factura</option>
-            <option value="a-paq">Activación de Paquetes</option>
-            <option value="estado">Estado de Línea (HLR/OCS)</option>
-            <option value="p-vas">Problema Servicios VAS</option>
-            <option value="llamadas">Inconveniente con Llamadas</option>
-            <option value="internet">Problemas de Navegación</option>
-        </select>
+    <div id="navigation" class="breadcrumb">Inicio</div>
+    <button id="backBtn" class="btn-back hidden" onclick="goBack()">← Volver</button>
+
+    <div id="level1" class="menu-grid">
+        <button class="btn-option" onclick="showLevel2('activacion')">ACTIVACIÓN / DESACTIVACIÓN Y SERVICIOS VAS</button>
+        <button class="btn-option" onclick="showLevel2('ajustes')">AJUSTES Y RECLAMOS DE FACTURACIÓN</button>
+        <button class="btn-option" onclick="showLevel2('bloqueos')">BLOQUEOS Y DESBLOQUEOS (IMEI/LÍNEA)</button>
+        <button class="btn-option" onclick="showLevel2('transacciones')">TRANSACCIONES DE LÍNEA Y PORTABILIDAD</button>
+        <button class="btn-option" onclick="showLevel2('fallas')">FALLAS TÉCNICAS (INTERNET/VOZ/SMS)</button>
     </div>
 
-    <form id="dynamicForm">
-        <div id="formFields" class="form-grid">
-            </div>
-    </form>
+    <div id="level2" class="menu-grid hidden"></div>
 
-    <button id="copyBtn" style="display:none;" onclick="copyToClipboard()">Copiar Información Formateada</button>
-    <div id="output-area"></div>
+    <div id="level3" class="menu-grid hidden"></div>
+
+    <div id="templateContainer" class="hidden">
+        <div class="template-card">
+            <h2 id="templateTitle" style="color: var(--primary);"></h2>
+            <p class="instruction">Instrucciones: Complete los campos a continuación. Los textos de guía desaparecerán automáticamente al escribir. Al finalizar, use el botón "Copiar" para procesar su ticket.</p>
+            <form id="activeForm">
+                <div id="dynamicFields"></div>
+                <button type="button" class="btn-copy" onclick="copyTemplate()">Copiar Información Formateada</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
-    const templates = {
-        general: [
-            {label: "Código de tienda/canal", id: "tienda"},
-            {label: "Línea con problema", id: "linea"},
-            {label: "Nombre del cliente", id: "cliente"},
-            {label: "Fecha y hora del problema", id: "fecha", type: "datetime-local"},
-            {label: "Descripción del problema", id: "desc", type: "textarea", full: true},
-            {label: "Descartes realizados", id: "descartes", type: "textarea", full: true}
-        ],
-        ajuste: [
-            {label: "Jefe que autoriza", id: "jefe"},
-            {label: "Línea afectada", id: "linea"},
-            {label: "Monto a ajustar (S/)", id: "monto"},
-            {label: "Periodo afectado", id: "periodo"},
-            {label: "Motivo (Sistema/Operativo)", id: "motivo"},
-            {label: "Descripción del caso", id: "desc", type: "textarea", full: true}
-        ],
-        estado: [
-            {label: "Línea", id: "linea"},
-            {label: "Mensaje de Error", id: "error"},
-            {label: "Error a corregir (HLR/OCS)", id: "corregir"},
-            {label: "Descripción", id: "desc", type: "textarea", full: true}
-        ],
-        llamadas: [
-            {label: "Línea", id: "linea"},
-            {label: "Plan", id: "plan"},
-            {label: "RoutingCategory (3/7/10)", id: "routing"},
-            {label: "Dirección completa", id: "dir", full: true},
-            {label: "Descripción del fallo", id: "desc", type: "textarea", full: true}
-        ]
-        // Se pueden añadir todas las demás del Excel siguiendo este patrón
+    const data = {
+        activacion: {
+            title: "Activación/Desactivación y VAS",
+            options: {
+                paquetes: {
+                    title: "Paquetes de Datos/Voz",
+                    options: {
+                        "activar-paq": { title: "Activación de Paquetes", fields: ["Línea", "Nombre del Paquete", "Monto", "Fecha y Hora", "Error de Sistema", "Descartes"] },
+                        "desactivar-paq": { title: "Desactivación de Paquetes", fields: ["Línea", "Paquete a eliminar", "Motivo", "Error al intentar", "Descartes"] }
+                    }
+                },
+                vas: {
+                    title: "Servicios VAS",
+                    options: {
+                        "act-vas": { title: "Incidencia con Activación VAS", fields: ["Línea", "Nombre VAS (B-comparte/Casilla/etc)", "Mensaje de error", "Agente", "Descartes"] },
+                        "des-vas": { title: "Incidencia con Desactivación VAS", fields: ["Línea", "Servicio VAS", "Error al desactivar", "Descartes"] }
+                    }
+                }
+            }
+        },
+        ajustes: {
+            title: "Ajustes y Facturación",
+            options: {
+                factura: {
+                    title: "Reclamo de Factura",
+                    options: {
+                        "ajuste-monto": { title: "Ajuste de Factura (Monto Incorrecto)", fields: ["Línea", "Periodo", "Monto a ajustar", "Jefe que autoriza", "Motivo (Sistema/Operativo)", "Descripción detallada"] },
+                        "penalidad": { title: "Penalidad Incorrecta", fields: ["Línea", "Monto penalidad", "Operador de origen", "Fecha de portabilidad", "Descripción", "Descartes"] }
+                    }
+                }
+            }
+        },
+        bloqueos: {
+            title: "Bloqueos y Desbloqueos",
+            options: {
+                imei: {
+                    title: "Gestión de IMEI",
+                    options: {
+                        "des-imei": { title: "Desbloqueo de Equipo", fields: ["IMEI", "Marca/Modelo", "Línea asociada", "DNI Solicitante", "Motivo (Error operativo/Carta)", "Jefe autorizador"] },
+                        "bloq-imei": { title: "Bloqueo por Robo/Pérdida", fields: ["IMEI", "Línea", "Datos del cliente", "Marca del equipo", "Número de referencia"] }
+                    }
+                },
+                linea: {
+                    title: "Gestión de Línea",
+                    options: {
+                        "des-deuda": { title: "Desbloqueo por Deuda Pago", fields: ["Línea", "Fecha de pago", "Monto", "Operación", "Validación en PS/CC", "Descripción"] }
+                    }
+                }
+            }
+        },
+        transacciones: {
+            title: "Transacciones de Línea",
+            options: {
+                sim: {
+                    title: "Cambios de SIM / Titular",
+                    options: {
+                        "repo-sim": { title: "Error Reposición SIM", fields: ["Línea", "Serial Nuevo SIM", "Mensaje de Error", "Agente", "Validación Biométrica (SI/NO)", "Descartes"] },
+                        "titularidad": { title: "Bypass Cambio Titular", fields: ["Línea", "DNI Titular Actual", "DNI Nuevo Titular", "Motivo", "Fallecimiento (SI/NO)"] }
+                    }
+                }
+            }
+        },
+        fallas: {
+            title: "Fallas Técnicas",
+            options: {
+                cobertura: {
+                    title: "Problemas de Cobertura",
+                    options: {
+                        "internet": { title: "Falla de Navegación", fields: ["Línea", "Plan", "Configuración APN", "Coordenadas Lat/Long", "Barras de señal", "Modelo de equipo", "Descartes realizados"] },
+                        "llamadas": { title: "Falla de Llamadas (HLR/OCS)", fields: ["Línea", "Error (Entrantes/Salientes)", "Estado HLR", "Routing Category", "Lugar de falla", "Descartes"] }
+                    }
+                }
+            }
+        }
     };
 
-    function generateForm() {
-        const selection = document.getElementById('templateSelector').value;
-        const container = document.getElementById('formFields');
-        const copyBtn = document.getElementById('copyBtn');
-        container.innerHTML = '';
-        
-        if (!selection) {
-            copyBtn.style.display = 'none';
-            return;
+    let history = [];
+
+    function showLevel2(catKey) {
+        const cat = data[catKey];
+        history.push('level1');
+        document.getElementById('level1').classList.add('hidden');
+        const l2 = document.getElementById('level2');
+        l2.innerHTML = '';
+        l2.classList.remove('hidden');
+        document.getElementById('backBtn').classList.remove('hidden');
+        document.getElementById('navigation').innerText = `Inicio > ${cat.title}`;
+
+        for (let key in cat.options) {
+            let opt = cat.options[key];
+            let btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.innerText = opt.title;
+            btn.onclick = () => showLevel3(catKey, key);
+            l2.appendChild(btn);
         }
-
-        templates[selection].forEach(field => {
-            const div = document.createElement('div');
-            if (field.full) div.className = 'full-width';
-
-            const label = document.createElement('label');
-            label.innerText = field.label;
-            
-            let input;
-            if (field.type === 'textarea') {
-                input = document.createElement('textarea');
-                input.rows = 3;
-            } else {
-                input = document.createElement('input');
-                input.type = field.type || 'text';
-            }
-            input.id = field.id;
-            input.placeholder = `Escriba aquí...`;
-
-            div.appendChild(label);
-            div.appendChild(input);
-            container.appendChild(div);
-        });
-        
-        copyBtn.style.display = 'block';
     }
 
-    function copyToClipboard() {
-        const selection = document.getElementById('templateSelector').value;
-        const fields = templates[selection];
-        let textOutput = `*** CASO 9018 - ${selection.toUpperCase()} ***\n\n`;
-        
-        fields.forEach(field => {
-            const val = document.getElementById(field.id).value;
-            textOutput += `${field.label}: ${val}\n`;
-        });
+    function showLevel3(catKey, subKey) {
+        const sub = data[catKey].options[subKey];
+        history.push('level2');
+        document.getElementById('level2').classList.add('hidden');
+        const l3 = document.getElementById('level3');
+        l3.innerHTML = '';
+        l3.classList.remove('hidden');
+        document.getElementById('navigation').innerText = `Inicio > ${data[catKey].title} > ${sub.title}`;
 
-        navigator.clipboard.writeText(textOutput).then(() => {
-            const out = document.getElementById('output-area');
-            out.style.display = 'block';
-            out.innerText = "¡Copiado al portapapeles!\n\n" + textOutput;
-            alert("Información copiada correctamente");
+        for (let key in sub.options) {
+            let opt = sub.options[key];
+            let btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.innerText = opt.title;
+            btn.onclick = () => showTemplate(catKey, subKey, key);
+            l3.appendChild(btn);
+        }
+    }
+
+    function showTemplate(catKey, subKey, tempKey) {
+        const temp = data[catKey].options[subKey].options[tempKey];
+        history.push('level3');
+        document.getElementById('level3').classList.add('hidden');
+        document.getElementById('templateContainer').classList.remove('hidden');
+        document.getElementById('templateTitle').innerText = temp.title;
+        document.getElementById('navigation').innerText += ` > ${temp.title}`;
+
+        const fieldsDiv = document.getElementById('dynamicFields');
+        fieldsDiv.innerHTML = '';
+        temp.fields.forEach(f => {
+            const group = document.createElement('div');
+            group.className = 'field-group';
+            group.innerHTML = `<label>${f}:</label><input type="text" placeholder="Escriba aquí ${f.toLowerCase()}..." data-label="${f}">`;
+            fieldsDiv.appendChild(group);
+        });
+    }
+
+    function goBack() {
+        const prev = history.pop();
+        document.getElementById('level1').classList.add('hidden');
+        document.getElementById('level2').classList.add('hidden');
+        document.getElementById('level3').classList.add('hidden');
+        document.getElementById('templateContainer').classList.add('hidden');
+        
+        document.getElementById(prev).classList.remove('hidden');
+        if (prev === 'level1') {
+            document.getElementById('backBtn').classList.add('hidden');
+            document.getElementById('navigation').innerText = 'Inicio';
+        }
+    }
+
+    function copyTemplate() {
+        const title = document.getElementById('templateTitle').innerText;
+        let text = `*** REPORTE 9018 - ${title.toUpperCase()} ***\n\n`;
+        const inputs = document.querySelectorAll('#dynamicFields input');
+        inputs.forEach(i => {
+            text += `${i.getAttribute('data-label')}: ${i.value}\n`;
+        });
+        
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Plantilla copiada. Pégala en el sistema.");
         });
     }
 </script>
-
 </body>
 </html>
