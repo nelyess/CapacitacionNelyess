@@ -3,221 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NELYESS - Calidad de Servicio Completo</title>
+    <title>NELYESS - Calidad de Servicio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* RESET Y VARIABLES ORIGINALES DEL USUARIO */
         :root {
-            --primary: #004a99;
-            --forest: #3A5A40;
-            --salvia: #A3B18A;
-            --cream: #F9FBF7;
-            --text: #2D3A30;
+            --forest: #3A5A40;     /* Verde bosque cálido */
+            --salvia: #A3B18A;     /* Verde salvia claro */
+            --cream: #F9FBF7;      /* Fondo crema muy suave */
+            --border-c: #CCD5AE;   /* Borde verde salvia */
+            --text-dark: #2D3A30;  /* Verde muy oscuro/tierra */
+            --bg-page: #f0f2f5;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Verdana, Arial, sans-serif; background-color: #f0f2f5; color: var(--text); line-height: 1.5; }
 
-        /* Navegación */
-        nav { background: var(--primary); padding: 15px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-        .btn-back { color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
-        .nav-title { color: white; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
+        body { 
+            font-family: Verdana, Arial, Helvetica, sans-serif; 
+            background-color: var(--bg-page); 
+            color: var(--text-dark); 
+            line-height: 1.5; 
+            padding-bottom: 50px;
+        }
 
-        .container { max-width: 1200px; margin: 20px auto; padding: 20px; background: white; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        /* NAVEGACIÓN */
+        .nav-top { background: var(--forest); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .btn-back { color: white; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-family: 'Segoe UI', sans-serif; }
 
-        /* Separadores de Secciones */
-        .seccion-bloque { margin-bottom: 60px; padding-bottom: 40px; border-bottom: 2px dashed var(--salvia); }
-        .seccion-bloque:last-child { border-bottom: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 40px; }
 
-        /* Estilos heredados de tus archivos originales (Respetando tu estructura) */
-        .section-header-wrapper { position: relative; align-self: flex-start; margin-bottom: 20px; }
+        /* ESTILO DE ENCABEZADOS ORIGINALES (SUPERPUESTOS) */
+        .section-header-wrapper { position: relative; align-self: flex-start; margin-bottom: 20px; margin-top: 10px; }
         .section-header-bg { position: absolute; background-color: var(--salvia); border-radius: 20px; bottom: -4px; left: 5px; right: -10px; top: 4px; z-index: 1; }
-        .section-header-text { position: relative; background-color: var(--forest); color: #ffffff; padding: 12px 30px; border-radius: 0 25px 25px 0; font-size: 20px; font-weight: 700; z-index: 2; margin-left: -20px; display: inline-block; }
+        .section-header-text { position: relative; background-color: var(--forest); color: #ffffff; padding: 10px 30px; border-radius: 0 25px 25px 0; font-size: clamp(16px, 3.5vw, 22px); font-weight: 700; z-index: 2; margin-left: -20px; display: inline-block; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        .info-list { display: flex; flex-direction: column; gap: 14px; font-size: 16px; margin: 20px 0; text-align: justify; }
-        .info-list strong { color: var(--forest); }
+        .bloque-seccion { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border-c); }
 
-        /* Diagrama de Flujo */
-        .flowchart { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 20px 0; }
-        .step-box { background-color: var(--cream); border: 1px solid #CCD5AE; padding: 20px; text-align: center; border-radius: 6px; font-size: 14px; }
+        /* LISTAS DE INFORMACIÓN */
+        .info-list { display: flex; flex-direction: column; gap: 14px; font-size: clamp(14px, 2.2vw, 16px); text-align: justify; margin-bottom: 20px; }
+        .info-list strong { color: var(--forest); font-weight: 700; }
 
-        /* Tabla de Estados */
-        .table-responsive { width: 100%; overflow-x: auto; border: 1px solid #CCD5AE; border-radius: 8px; margin-top: 10px; }
-        .status-table { width: 100%; border-collapse: collapse; min-width: 700px; background: white; }
-        .status-table th { background-color: var(--salvia); padding: 15px; border-bottom: 2px solid var(--forest); }
-        .status-table td { padding: 15px; border-bottom: 1px solid #E1E8D5; font-size: 14px; }
+        /* FLUJOGRAMA ORIGINAL */
+        .flowchart { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .step-box { background-color: var(--cream); border: 1px solid var(--border-c); padding: 15px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px; color: var(--text-dark); box-shadow: 2px 2px 8px rgba(58, 90, 64, 0.08); border-radius: 6px; }
 
-        /* Plantilla BCCS (Tu formulario completo) */
-        .plantilla-card { background: var(--cream); border: 1px solid #CCD5AE; border-radius: 15px; padding: 30px; }
-        .linea-campo { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid #F0F2E8; }
-        .etiqueta { font-size: 13.5px; font-weight: 700; color: var(--forest); }
-        input, textarea { flex: 1; min-width: 250px; border: none; border-bottom: 1px solid var(--salvia); padding: 5px; font-size: 14px; outline: none; background: transparent; }
+        /* CAJAS DE INSTRUCCIÓN Y CALLOUTS */
+        .instructions-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .instruction-box { font-size: 13.5px; line-height: 1.6; background: #FFFFFF; padding: 15px; border-radius: 10px; border-left: 5px solid var(--salvia); text-align: justify; display: flex; align-items: center; }
         
+        .callout-box { background-color: var(--cream); border: 2px solid var(--salvia); border-radius: 8px; padding: 20px; box-shadow: 2px 4px 10px rgba(58, 90, 64, 0.08); font-size: 14px; font-style: italic; text-align: justify; margin-top: 15px; }
+
+        /* IMÁGENES ZOOMABLES */
+        .image-preview-top, .image-box { width: 100%; border: 1px solid var(--border-c); border-radius: 8px; overflow: hidden; cursor: zoom-in; box-shadow: 2px 2px 8px rgba(58, 90, 64, 0.08); text-align: center; background: var(--cream); padding: 10px; margin: 15px 0; transition: 0.3s; }
+        .image-preview-top:hover, .image-box:hover { transform: scale(1.01); border-color: var(--forest); }
+        .image-preview-top img, .image-box img { width: 100%; max-width: 1000px; display: block; margin: 0 auto; }
+
+        /* GRID DE PASOS E IMÁGENES */
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .step-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; align-items: center; margin-bottom: 20px; }
+        .step-row.reverse { grid-template-columns: 1fr 1.5fr; }
+
+        /* REQUISITOS CANAL PRESENCIAL */
+        .req-item { font-size: 15px; display: flex; margin-bottom: 15px; text-align: justify; }
+        .req-number { font-weight: 700; margin-right: 10px; color: var(--forest); }
+        .req-content { display: flex; flex-direction: column; gap: 6px; }
+        .sub-text { color: #526A54; font-size: 0.9em; }
+
+        /* PLANTILLA DE AVERÍA ORIGINAL */
+        .plantilla-card { background: var(--cream); border: 1px solid var(--border-c); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .linea-campo { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid #F0F2E8; }
+        .etiqueta { font-size: 13.5px; font-weight: 700; color: var(--forest); min-width: 250px; }
+        input, textarea { flex: 1; min-width: 250px; border: none; background: #FFF; border-bottom: 1px solid var(--salvia); padding: 4px 10px; font-family: inherit; font-size: 14px; outline: none; }
+        input:focus, textarea:focus { background: #F1F5E9; border-bottom: 2px solid var(--forest); }
+        input::placeholder, textarea::placeholder { color: var(--salvia); font-style: italic; font-size: 12.5px; }
+
         .btn-group { margin-top: 25px; display: flex; gap: 15px; }
         .btn { flex: 1; padding: 15px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .btn-copy { background-color: var(--forest); color: white; }
+        .btn-copy:hover { background-color: #588157; transform: translateY(-2px); }
         .btn-clear { background-color: #E9EDC9; color: var(--forest); }
 
-        /* Imágenes Zoom */
-        .image-box { border: 1px solid #CCD5AE; border-radius: 8px; overflow: hidden; margin: 20px 0; text-align: center; }
-        .image-box img { max-width: 100%; cursor: zoom-in; transition: 0.3s; }
+        /* TABLA DE ESTADOS ORIGINAL */
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 8px; box-shadow: 2px 4px 12px rgba(58, 90, 64, 0.08); border: 1px solid var(--border-c); margin-top: 15px; }
+        .status-table { width: 100%; border-collapse: collapse; min-width: 700px; background-color: #ffffff; }
+        .status-table th { background-color: var(--salvia); color: #1A241B; font-size: 15px; font-weight: 700; text-align: center; padding: 15px; border-bottom: 2px solid var(--forest); }
+        .status-table td { padding: 15px; border-bottom: 1px solid #E1E8D5; font-size: 14px; vertical-align: middle; }
+        .status-table td:first-child { font-weight: 600; color: var(--forest); background-color: var(--cream); width: 35%; border-right: 1px solid #E1E8D5; }
+        .status-table td:last-child { width: 65%; text-align: justify; }
+        .status-table tbody tr:hover td { background-color: #F2F5EB; }
 
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        .modal-content { max-width: 95%; max-height: 95%; object-fit: contain; }
+        /* MODAL PARA ZOOM */
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 10, 0.95); align-items: center; justify-content: center; flex-direction: column; }
+        .modal-content { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; animation: zoomIn 0.3s ease; }
+        .close-btn { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
+        .close-btn:hover { color: var(--salvia); }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        @media (max-width: 768px) { .flowchart { grid-template-columns: 1fr; } .linea-campo { flex-direction: column; } }
+        @media (max-width: 768px) {
+            .flowchart { grid-template-columns: 1fr; }
+            .content-grid, .step-row, .step-row.reverse { grid-template-columns: 1fr; }
+            .instructions-container { grid-template-columns: 1fr; }
+            .step-row.reverse .callout-box { order: 2; }
+            .step-row.reverse .image-box { order: 1; }
+        }
     </style>
 </head>
 <body>
 
-<nav>
-    <a href="posventa.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER A POSVENTA</a>
-    <div class="nav-title">Gestión de Calidad y Averías - Nelyess</div>
-</nav>
+    <nav class="nav-top">
+        <a href="posventa.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER AL INICIO</a>
+        <span style="color: white; font-weight: bold; font-family: 'Segoe UI', sans-serif;">GESTIÓN BCCS</span>
+    </nav>
 
-<div class="container">
+    <div class="container">
 
-    <div class="seccion-bloque">
-        <div class="section-header-wrapper">
-            <div class="section-header-bg"></div>
-            <div class="section-header-text">CONDICIONES GENERALES</div>
+        <div class="bloque-seccion">
+            <div class="section-header-wrapper">
+                <div class="section-header-bg"></div>
+                <div class="section-header-text">CONDICIONES GENERALES</div>
+            </div>
+            <div class="info-list">
+                <p><strong>¿Qué es?:</strong> Procedimiento previo al reclamo de calidad de primera instancia que inicia un usuario cuando desee reportar problemas con la calidad del servicio.</p>
+                <p><strong>¿Cuándo aplica?:</strong> Cuando el usuario desee reportar cualquier problema con la calidad del servicio.</p>
+                <p><strong>¿Qué deberá realizar el agente?:</strong> En estos casos, se deberá registrar el reporte en el BCCS y se emitirá una constancia con el código asignado.</p>
+                <p><strong>¿Cuál es el plazo de atención?:</strong> 1 día calendario, 2 días calendario para servicios fijos instalados en centros poblados rurales, + 1 día calendario adicional cuando el usuario no se hubiera encontrado durante la visita y no se hubiera solucionado.</p>
+            </div>
+            <div class="flowchart">
+                <div class="step-box"><span><strong>1.</strong> Detección del inconveniente (debe estar versado a problemas de calidad del servicio).</span></div>
+                <div class="step-box"><span><strong>2.</strong> Detección del tipo de servicio y validación de datos.</span></div>
+                <div class="step-box"><span><strong>3.</strong> Realización de descartes básicos identificando que el problema no sea del equipo.</span></div>
+                <div class="step-box"><span><strong>4.</strong> Acceso a la opción de reporte del BCCS (en el servicio problema).</span></div>
+                <div class="step-box"><span><strong>5.</strong> Completar la información requerida por el BCCS.</span></div>
+                <div class="step-box"><span><strong>6.</strong> El sistema enviará la constancia vía SMS.</span></div>
+            </div>
         </div>
-        <div class="info-list">
-            <p><strong>¿Qué es?:</strong> Procedimiento previo al reclamo de calidad de primera instancia que inicia un usuario cuando desee reportar problemas con la calidad del servicio.</p>
-            <p><strong>¿Cuándo aplica?:</strong> Cuando el usuario desee reportar cualquier problema con la calidad del servicio.</p>
-            <p><strong>¿Qué deberá realizar el agente?:</strong> En estos casos, se deberá registrar el reporte en el BCCS y se emitirá una constancia con el código asignado.</p>
-            <p><strong>¿Cuál es el plazo de atención?:</strong> 1 día calendario, 2 días calendario para servicios fijos instalados en centros poblados rurales, + 1 día calendario adicional cuando el usuario no se hubiera encontrado durante la visita y no se hubiera solucionado.</p>
-        </div>
-        <div class="flowchart">
-            <div class="step-box"><strong>1.</strong> Detección del inconveniente (debe estar versado a problemas de calidad del servicio).</div>
-            <div class="step-box"><strong>2.</strong> Detección del tipo de servicio y validación de datos.</div>
-            <div class="step-box"><strong>3.</strong> Realización de descartes básicos identificando que el problema no sea del equipo.</div>
-            <div class="step-box"><strong>4.</strong> Acceso a la opción de reporte del BCCS (en el servicio problema).</div>
-            <div class="step-box"><strong>5.</strong> Completar la información requerida por el BCCS.</div>
-            <div class="step-box"><strong>6.</strong> El sistema enviará la constancia vía SMS.</div>
-        </div>
-    </div>
 
-    <div class="seccion-bloque">
-        <div class="section-header-wrapper">
-            <div class="section-header-bg"></div>
-            <div class="section-header-text">REGISTRO DE REPORTE - PLANTILLA BCCS</div>
-        </div>
-        <div style="background: #F1F5E9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px solid #CCD5AE; font-size: 13px;">
-            <p>• Para completar estos campos, se le indicará al cliente: "En caso su reporte de avería sea elevado a un reclamo, ¿Por qué medio de notificación le gustaría recibir su respuesta: Físico o virtual?"</p>
-            <p>• El correo electrónico y la dirección solicitada en estos campos se empleará para la etapa de elevación a un reclamo en caso suceda.</p>
-        </div>
-        <div class="image-box">
-            <img src="https://i.postimg.cc/nhJC8bBs/Captura-de-pantalla-2026-03-06-153844.png" onclick="openModal(this.src)" alt="Guía BCCS">
-        </div>
-        <div class="plantilla-card">
-            <form id="averiaForm">
-                <div class="linea-campo"><span class="etiqueta">• Jefe/Supervisor aprobador del reporte:</span><input type="text" id="c1" placeholder="nombre del agente"></div>
-                <div class="linea-campo"><span class="etiqueta">• Acreditó condición:</span><input type="text" id="c2" placeholder="SI / NO"></div>
-                <div class="linea-campo"><span class="etiqueta">• Dirección donde presenta los inconvenientes:</span><input type="text" id="c3" placeholder="referencias, Urb, centro poblado, dist, prov, dpto"></div>
-                <div class="linea-campo"><span class="etiqueta">• Ubicación georreferenciada (Coordenadas):</span><input type="text" id="c4" placeholder="Latitud, Longitud"></div>
-                <div class="linea-campo"><span class="etiqueta">• Indicador de Cobertura:</span><input type="text" id="c5" placeholder="barra de cobertura"></div>
-                <div class="linea-campo"><span class="etiqueta">• Mensaje de Error:</span><input type="text" id="c6" placeholder="si lo hubiera"></div>
-                <div class="linea-campo"><span class="etiqueta">• Reinicio su equipo:</span><input type="text" id="c7" placeholder="SI / NO"></div>
-                <div class="linea-campo"><span class="etiqueta">• Cuenta con otra línea con incidencia:</span><input type="text" id="c8" placeholder="Número adicional o Ninguna"></div>
-                <div class="linea-campo"><span class="etiqueta">• Equipo adquirido en Bitel:</span><input type="text" id="c9" placeholder="SI / NO"></div>
-                <div class="linea-campo"><span class="etiqueta">• Sistema operativo del Dispositivo:</span><input type="text" id="c10" placeholder="Ej: Android 13"></div>
-                <div class="linea-campo"><span class="etiqueta">• Cantidad de KB vigente:</span><input type="text" id="c11" placeholder="Saldo OCS o Plan Ilimitado"></div>
-                <div class="linea-campo"><span class="etiqueta">• ¿Chip probado en otro equipo?:</span><input type="text" id="c12" placeholder="SI / NO"></div>
-                <div class="linea-campo"><span class="etiqueta">• Detalle del problema:</span><textarea id="c13" rows="3"></textarea></div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-copy" onclick="copyAction()">Copiar Plantilla</button>
-                    <button type="button" class="btn btn-clear" onclick="document.getElementById('averiaForm').reset()">Limpiar</button>
+        <div class="bloque-seccion">
+            <h1 style="font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: var(--forest); text-transform: uppercase; border-bottom: 3px solid #E9EDC9; padding-bottom: 10px; text-align: center; margin-bottom: 20px;">Registro del Reporte de Avería en el BCCS</h1>
+            
+            <div style="background: #F1F5E9; padding: 20px; border-radius: 15px; border: 1px solid var(--border-c); margin-bottom: 20px;">
+                <div class="instructions-container">
+                    <div class="instruction-box">Para completar estos campos, se le indicará al cliente: "En caso su reporte de avería sea elevado a un reclamo, ¿Por qué medio de notificación le gustaría recibir su respuesta: Físico o virtual?"</div>
+                    <div class="instruction-box">El correo electrónico y la dirección solicitada en estos campos se empleará para la etapa de elevación a un reclamo en caso suceda.</div>
                 </div>
-            </form>
+                <div class="image-preview-top" onclick="openModal('https://i.postimg.cc/nhJC8bBs/Captura-de-pantalla-2026-03-06-153844.png')">
+                    <img src="https://i.postimg.cc/nhJC8bBs/Captura-de-pantalla-2026-03-06-153844.png" alt="Guía BCCS">
+                </div>
+            </div>
+
+            <div class="plantilla-card">
+                <form id="averiaForm" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Jefe/Supervisor aprobador del reporte:</span>
+                        <input type="text" id="c1" placeholder="nombre del agente que esta subiendo la averia">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Acreditó condición:</span>
+                        <input type="text" id="c2" placeholder="SI / NO">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Dirección donde presenta los inconvenientes:</span>
+                        <input type="text" id="c3" placeholder="referencias válidas, cruce de avenidas, Urb – centro poblado - dist – prov – dpto">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Ubicación georreferenciada (Coordenadas):</span>
+                        <input type="text" id="c4" placeholder="Latitud, Longitud">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Indicador de Cobertura:</span>
+                        <input type="text" id="c5" placeholder="barra de cobertura que figura en el teléfono">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Mensaje de Error:</span>
+                        <input type="text" id="c6" placeholder="solo si hubiera mensaje de error">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Reinicio su equipo:</span>
+                        <input type="text" id="c7" placeholder="(SI/NO)">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Cuenta con alguna otra línea que presenta la incidencia:</span>
+                        <input type="text" id="c8" placeholder="Número adicional o Ninguna">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Equipo fue adquirido en Bitel:</span>
+                        <input type="text" id="c9" placeholder="SI/NO">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Sistema operativo del Dispositivo:</span>
+                        <input type="text" id="c10" placeholder="Ej: Android 13, iOS 17">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• Cantidad de KB vigente al momento de escalar:</span>
+                        <input type="text" id="c11" placeholder="(SI NO ES PLAN ILIMITADO PRECISAR EL SALDO DISPONIBLE OCS – SINO SOLO SEÑALAR PLAN ILIMITADO)">
+                    </div>
+                    <div class="linea-campo">
+                        <span class="etiqueta">• ¿Se probó el chip en otro equipo y se solucionó el inconveniente?:</span>
+                        <input type="text" id="c12" placeholder="(SI / NO)">
+                    </div>
+                    <div class="linea-campo" style="border:none;">
+                        <span class="etiqueta">• Detalle del problema:</span>
+                        <textarea id="c13" rows="3" placeholder="Describa la incidencia aquí de manera detallada..."></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-copy" onclick="copyAction()">Copiar Plantilla</button>
+                        <button type="button" class="btn btn-clear" onclick="if(confirm('¿Borrar datos?')) document.getElementById('averiaForm').reset()">Limpiar</button>
+                    </div>
+                </form>
+            </div>
         </div>
+
+        <div class="bloque-seccion">
+            <div class="section-header-wrapper">
+                <div class="section-header-bg"></div>
+                <div class="section-header-text" style="font-size: clamp(16px, 3vw, 20px);">REQUISITOS DE PRESENTACIÓN EN EL CANAL PRESENCIAL</div>
+            </div>
+            <div style="font-size: clamp(16px, 3vw, 20px); font-weight: 600; margin-bottom: 20px;">Los reportes por calidad o avería presentados por los abonados deben contener los siguientes requisitos:</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="req-item"><span class="req-number">1.</span><div class="req-content">Nombres y apellidos completos del usuario o razón de social del Reclamante.</div></div>
+                <div class="req-item"><span class="req-number">2.</span>
+                    <div class="req-content">
+                        <span>Tipo y número del documento legal de identificación del usuario (Documento Nacional de Identidad, Carné de Extranjería, o Registro Único de Contribuyentes, según corresponda). En los reportes presentados por representante debe consignarse, adicionalmente, los datos de éste, así como el poder correspondiente, conforme a lo dispuesto en los artículos 26 y 27.</span>
+                        <span class="sub-text">Tipo de documento del abonado reclamante (DNI, C.E., PASAPORTE o RUC).</span>
+                        <span class="sub-text">En los casos de clientes con documento RUC o para representantes la vía de presentación del mismo será mediante CAB.</span>
+                    </div>
+                </div>
+                <div class="req-item"><span class="req-number">3.</span><div class="req-content">Número o código de servicio afectado.</div></div>
+                <div class="req-item"><span class="req-number">4.</span>
+                    <div class="req-content">
+                        <span>Datos de contacto.</span>
+                        <span class="sub-text">Número telefónico de contacto.</span>
+                        <span class="sub-text">Correo electrónico de contacto.</span>
+                    </div>
+                </div>
+                <div class="req-item"><span class="req-number">5.</span>
+                    <div class="req-content">
+                        <span>Dirección en la cual se presenta el problema de calidad y/o avería.</span>
+                        <span class="sub-text">Se debe detallar la dirección, ubigeo, departamento, provincia, distrito y centro poblado.</span>
+                    </div>
+                </div>
+                <div class="req-item"><span class="req-number">6.</span>
+                    <div class="req-content">
+                        <span>Ubicación georreferenciada.</span>
+                        <span class="sub-text">Debe incluir las coordenadas geográficas (longitud y latitud), del centro poblado donde se presente el problema.</span>
+                    </div>
+                </div>
+                <div class="req-item"><span class="req-number">7.</span><div class="req-content">Detalle del problema.</div></div>
+                <div class="req-item"><span class="req-number">8.</span><div class="req-content">Fecha y hora de inicio aproximada del problema.</div></div>
+            </div>
+        </div>
+
+        <div class="bloque-seccion">
+            <div class="section-header-wrapper">
+                <div class="section-header-bg"></div>
+                <div class="section-header-text">REGISTRO DEL REPORTE DE AVERÍA EN EL BCCS</div>
+            </div>
+            
+            <div class="content-grid">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="info-list" style="margin-bottom:0;">
+                        Para el registro del reporte por avería en el Customer Care se debe seguir la siguiente ruta: <strong>Reclamo – Reclamo por avería – Seleccionar el tipo de servicio (Prepago, Postpago, Internet Móvil, Internet Fijo) – Avería – Elegir de acuerdo al problema reportado.</strong>
+                    </div>
+                    <div class="image-box" onclick="openModal('https://i.postimg.cc/9FsYZSG4/Captura-de-pantalla-2026-03-06-150800.png')">
+                        <img src="https://i.postimg.cc/9FsYZSG4/Captura-de-pantalla-2026-03-06-150800.png" alt="Ruta BCCS">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="info-list" style="margin-bottom:0;">
+                        Se debe completar la información de la persona que reporta la avería de acuerdo a la condición de reclamante (Titular, usuario o representante).
+                    </div>
+                    <div class="image-box" onclick="openModal('https://i.postimg.cc/BQFK9vK9/Captura-de-pantalla-2026-03-06-151136.png')">
+                        <img src="https://i.postimg.cc/BQFK9vK9/Captura-de-pantalla-2026-03-06-151136.png" alt="Datos BCCS">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bloque-seccion">
+            <div class="section-header-wrapper">
+                <div class="section-header-bg"></div>
+                <div class="section-header-text">REGISTRO DEL REPORTE DE AVERÍA EN EL BCCS</div>
+            </div>
+            
+            <div class="step-row">
+                <div class="image-box" onclick="openModal('https://i.postimg.cc/XJpwZSs1/Captura-de-pantalla-2026-03-06-155407.png')">
+                    <img src="https://i.postimg.cc/XJpwZSs1/Captura-de-pantalla-2026-03-06-155407.png" alt="Coordenadas BCCS">
+                </div>
+                <div class="callout-box">
+                    Los campos “centro poblado”, “problema de longitud” y “problema de latitud”, se completarán al llenar la información que solicita presionando la opción “select”.
+                </div>
+            </div>
+
+            <div class="step-row reverse">
+                <div class="callout-box">
+                    Se abrirá una nueva ventana, en donde solicitará ingresar el departamento, provincia y distrito, luego de ello, se debe presionar “Search” y aparecerá el listado de centros poblados, en el cual se seleccionará el señalado por el cliente, presionando en “Select”.
+                </div>
+                <div class="image-box" onclick="openModal('https://i.postimg.cc/G3v4XmTY/Captura-de-pantalla-2026-03-06-155629.png')">
+                    <img src="https://i.postimg.cc/G3v4XmTY/Captura-de-pantalla-2026-03-06-155629.png" alt="Búsqueda de centros poblados">
+                </div>
+            </div>
+        </div>
+
+        <div class="bloque-seccion">
+            <div class="section-header-wrapper">
+                <div class="section-header-bg"></div>
+                <div class="section-header-text">ENTREGA DEL CÓDIGO DE REPORTE Y CONSTANCIA</div>
+            </div>
+            
+            <div class="info-list">
+                <p>Una vez generado el reporte de calidad o avería, procederemos a mencionar los plazos y a brindar el código que se le envió vía SMS:</p>
+                <p>“El plazo de atención de su reporte por calidad o avería es de 1 día calendario para centros poblados urbanos y de 2 días calendarios en centros poblados rurales. Este plazo podrá extenderse por un (1) día calendario adicional, siempre que el usuario no se hubiere encontrado durante la visita realizada por la empresa operadora; y, debido a ello, no se hubiere resuelto el problema del servicio.”</p>
+                <p>Asimismo, le recordamos que en caso no brinde su conformidad con la solución brindada o el inconveniente persista al concluir los plazos antes señalados, generaremos de forma automática un reclamo por calidad e idoneidad en la prestación del servicio, dicho reclamo mantendrá el código de su reporte por problemas de calidad y avería generado inicialmente y tendrá un plazo para la resolución de 03 días hábiles y de 5 días hábiles adicionales para la notificación.</p>
+                <p>Por otro lado le recordamos que podrá acceder al expediente del reclamo por calidad e idoneidad desde nuestra plataforma de expediente virtual. La misma que se encuentra publicada en nuestra página web www.bitel.com.pe. Esta información la podrá visualizar en un plazo no mayor a 3 días hábiles. Para su primer acceso, podrá usar su número de documento de identidad como usuario y contraseña. Posteriormente, le recomendamos actualizar su clave, si considera necesario.”</p>
+            </div>
+            
+            <div class="image-box" onclick="openModal('https://i.postimg.cc/pXD1Vzhh/Captura-de-pantalla-2026-03-06-160259.png')">
+                <img src="https://i.postimg.cc/pXD1Vzhh/Captura-de-pantalla-2026-03-06-160259.png" alt="Tabla de reporte BCCS">
+            </div>
+
+            <div class="info-list" style="margin-top: 30px;">
+                <p>La constancia de la presentación del reporte de calidad o avería es enviada por SMS, al número ingresado previamente, y se visualiza en el Customer Care:</p>
+            </div>
+            <div class="image-box" onclick="openModal('https://i.postimg.cc/6QGZwLqj/Captura-de-pantalla-2026-03-06-160630.png')">
+                <img src="https://i.postimg.cc/6QGZwLqj/Captura-de-pantalla-2026-03-06-160630.png" alt="Emisión de constancia SMS">
+            </div>
+        </div>
+
+        <div class="bloque-seccion">
+            <div class="section-header-wrapper">
+                <div class="section-header-bg"></div>
+                <div class="section-header-text">ENTREGA DE INFORMACIÓN ANTE CONSULTAS DE LOS ESTADOS DE REPORTES PRESENTADOS</div>
+            </div>
+            
+            <div class="info-list">
+                <p>Primero se debe validar el estado del reporte de avería, ubicando la tipificación del reporte de avería en el Customer Care:</p>
+            </div>
+            <div class="image-box" onclick="openModal('https://i.postimg.cc/vmMyHGZV/Captura-de-pantalla-2026-03-06-161226.png')">
+                <img src="https://i.postimg.cc/vmMyHGZV/Captura-de-pantalla-2026-03-06-161226.png" alt="Consulta de estados BCCS">
+            </div>
+            <div class="callout-box" style="align-self: flex-end; max-width: 600px; margin-left: auto;">
+                Después de los tres numerales (###), se encuentra el estado de la reporte por avería, y es la información a entregar al cliente.
+            </div>
+
+            <div class="table-responsive" style="margin-top: 30px;">
+                <table class="status-table">
+                    <thead>
+                        <tr><th>Estado</th><th>Información</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Intento de comunicación para revisión del inconveniente</td>
+                            <td>Se intentó comunicar con el abonado (revisar en la opción de Historia del Suscriptor (Subscriber History)) la fecha y hora de la próxima comunicación que se le envió por sms al abonado, e informarle ello.</td>
+                        </tr>
+                        <tr>
+                            <td>Realización de configuraciones en el servicio</td>
+                            <td>Se realizaron configuraciones en el servicio, por lo que se debe validar con el cliente si el problema persiste o fue solucionado y detallarlo en la plantilla.</td>
+                        </tr>
+                        <tr>
+                            <td>Intento de comunicacion para validar el estado de la solucion</td>
+                            <td>Se intentó comunicar con el abonado (revisar en la opción de Historia del Suscriptor (Subscriber History)) la fecha y hora de la próxima comunicación que se le envió por sms al abonado, e informarle ello.</td>
+                        </tr>
+                        <tr>
+                            <td>Intento de comunicación para programar la visita técnica</td>
+                            <td>Se intentó comunicar con el abonado. Solicitar una hora en la que este disponible para programar visita y detallarlo en la plantilla.</td>
+                        </tr>
+                        <tr>
+                            <td>Visita técnica programada</td>
+                            <td>Se programo visita técnica. Revisar en la opción de Historia del Suscriptor (Subscriber History) la fecha y hora de la visita programada que se le envió por sms al abonado e informarle ello. Si menciona que desea reprogramarla, solicitar una hora dentro de las 24 horas desde la generación de su reporte por avería para CP urbano, o 48 horas CP rural y detallarlo en la plantilla.</td>
+                        </tr>
+                        <tr>
+                            <td>Visita técnica realizada – No se encontró al cliente</td>
+                            <td>Se realizó visita técnica y no se encontró al abonado. Indicar que la fecha y hora de la próxima visita se encuentra en el documento dejado en su domicilio. Si menciona que desea reprogramarla, solicitar una hora dentro de las 24 horas desde la realización de la visita.</td>
+                        </tr>
+                        <tr>
+                            <td>Intento de comunicación para reprogramar la visita técnica</td>
+                            <td>Se intentó comunicar con el abonado. Solicitar una hora en la que este disponible para programar visita y detallarlo en la plantilla.</td>
+                        </tr>
+                        <tr>
+                            <td>Visita tecnica reprogramada</td>
+                            <td>Se programo visita técnica. Revisar en la opción de Historia del Suscriptor (Subscriber History) la fecha y hora de la visita programada que se le envió por sms al abonado e informarle. Si menciona que desea reprogramarla, solicitar una hora dentro de las 24 horas desde la realización de la visita.</td>
+                        </tr>
+                        <tr>
+                            <td>Visita técnica realizada – Se realizaron pruebas</td>
+                            <td>Informar ello, y que se procederá de acuerdo a lo informado en la constancia de reparación.</td>
+                        </tr>
+                        <tr>
+                            <td>Reporte se elevo a reclamo por calidad e idoneidad</td>
+                            <td>El reporte por calidad fue elevado a un reclamo por calidad e idoneidad, informar que el código es el mismo y el plazo de atención del reclamo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
-    <div class="seccion-bloque">
-        <div class="section-header-wrapper">
-            <div class="section-header-bg"></div>
-            <div class="section-header-text">REQUISITOS CANAL PRESENCIAL</div>
-        </div>
-        <div class="info-list">
-            <p><strong>1.</strong> Nombres y apellidos completos del usuario o razón de social del Reclamante.</p>
-            <p><strong>2.</strong> Tipo y número del documento legal (DNI, C.E., Pasaporte o RUC). En representantes consignar poder.</p>
-            <p><strong>3.</strong> Número o código de servicio afectado.</p>
-            <p><strong>4.</strong> Datos de contacto (Teléfono y correo electrónico).</p>
-            <p><strong>5.</strong> Dirección exacta (ubigeo, dpto, prov, dist, centro poblado).</p>
-            <p><strong>6.</strong> Ubicación georreferenciada (Coordenadas geográficas).</p>
-            <p><strong>7.</strong> Detalle del problema.</p>
-            <p><strong>8.</strong> Fecha y hora de inicio aproximada del problema.</p>
-        </div>
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="zoomedImg">
     </div>
 
-    <div class="seccion-bloque">
-        <div class="section-header-wrapper">
-            <div class="section-header-bg"></div>
-            <div class="section-header-text">RUTAS Y PROCEDIMIENTOS BCCS</div>
-        </div>
-        <p class="info-list">Ruta: <strong>Reclamo – Reclamo por avería – Seleccionar servicio – Avería – Elegir problema.</strong></p>
-        <div class="image-box"><img src="https://i.postimg.cc/9FsYZSG4/Captura-de-pantalla-2026-03-06-150800.png" onclick="openModal(this.src)"></div>
-        <p class="info-list">Completar campos de <strong>longitud y latitud</strong> presionando "select" y buscando el centro poblado.</p>
-        <div class="image-box"><img src="https://i.postimg.cc/XJpwZSs1/Captura-de-pantalla-2026-03-06-155407.png" onclick="openModal(this.src)"></div>
-        <p class="info-list"><strong>Entrega de Código:</strong> Una vez generado, mencionar plazos y brindar código enviado por SMS.</p>
-        <div class="image-box"><img src="https://i.postimg.cc/pXD1Vzhh/Captura-de-pantalla-2026-03-06-160259.png" onclick="openModal(this.src)"></div>
-    </div>
-
-    <div class="seccion-bloque">
-        <div class="section-header-wrapper">
-            <div class="section-header-bg"></div>
-            <div class="section-header-text">ESTADOS DE REPORTES</div>
-        </div>
-        <div class="table-responsive">
-            <table class="status-table">
-                <thead><tr><th>Estado</th><th>Información</th></tr></thead>
-                <tbody>
-                    <tr><td>Intento de comunicación para revisión</td><td>Revisar Historia del Suscriptor (Subscriber History) para fecha/hora de comunicación.</td></tr>
-                    <tr><td>Configuraciones en el servicio</td><td>Validar con el cliente si el problema persiste o fue solucionado.</td></tr>
-                    <tr><td>Visita técnica programada</td><td>Revisar fecha y hora en Subscriber History. Reprogramación dentro de 24h (Urbano) o 48h (Rural).</td></tr>
-                    <tr><td>Visita técnica realizada – No se encontró</td><td>Indicar fecha/hora de próxima visita en documento dejado. Reprogramación dentro de 24h.</td></tr>
-                    <tr><td>Reporte se elevo a reclamo</td><td>Mismo código, plazo de resolución 03 días hábiles + 5 para notificación.</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="image-box" style="margin-top: 20px;">
-            <img src="https://i.postimg.cc/vmMyHGZV/Captura-de-pantalla-2026-03-06-161226.png" onclick="openModal(this.src)">
-        </div>
-    </div>
-
-</div>
-
-<div id="zoomModal" class="modal" onclick="closeModal()">
-    <span style="position:fixed; top:20px; right:30px; color:white; font-size:40px; cursor:pointer;">&times;</span>
-    <img class="modal-content" id="fullImg">
-</div>
-
-<script>
-    function copyAction() {
-        const labels = [
-            "• Jefe/Supervisor aprobador:", "• Acreditó condición:", "• Dirección:", 
-            "• Coordenadas:", "• Cobertura:", "• Mensaje Error:", "• Reinicio equipo:",
-            "• Otra línea:", "• Equipo Bitel:", "• Sistema Operativo:", "• KB Vigente:",
-            "• Chip en otro equipo:", "• Detalle del problema:"
-        ];
-        let finalText = "PLANTILLA REPORTE AVERÍA\n";
-        for(let i=1; i<=13; i++) {
-            const val = document.getElementById('c'+i).value;
-            finalText += `${labels[i-1]} ${val}\n`;
+    <script>
+        // Función para copiar los 13 campos del formulario
+        function copyAction() {
+            const labels = [
+                "• Jefe/Supervisor aprobador del reporte:", "• Acreditó condición:", 
+                "• Dirección donde presenta los inconvenientes:", "• Ubicación georreferenciada (Coordenadas):",
+                "• Indicador de Cobertura:", "• Mensaje de Error:", "• Reinicio su equipo:",
+                "• Cuenta con alguna otra línea que presenta la incidencia:", "• Equipo fue adquirido en Bitel:",
+                "• Sistema operativo del Dispositivo:", "• Cantidad de KB vigente al momento de escalar:",
+                "• ¿Se probó el chip en otro equipo y se solucionó el inconveniente?:", "• Detalle del problema:"
+            ];
+            let finalText = "";
+            for(let i=1; i<=13; i++) {
+                const val = document.getElementById('c'+i).value;
+                finalText += `${labels[i-1]} ${val}\n`;
+            }
+            const area = document.createElement("textarea");
+            area.value = finalText;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand("copy");
+            document.body.removeChild(area);
+            alert("¡Plantilla copiada al portapapeles!");
         }
-        const area = document.createElement("textarea");
-        area.value = finalText; document.body.appendChild(area);
-        area.select(); document.execCommand("copy");
-        document.body.removeChild(area);
-        alert("¡Plantilla completa copiada!");
-    }
 
-    function openModal(src) {
-        document.getElementById("zoomModal").style.display = "flex";
-        document.getElementById("fullImg").src = src;
-    }
-    function closeModal() { document.getElementById("zoomModal").style.display = "none"; }
-</script>
+        // Funciones para el Modal de Zoom
+        function openModal(src) {
+            const modal = document.getElementById("imageModal");
+            const img = document.getElementById("zoomedImg");
+            modal.style.display = "flex";
+            img.src = src;
+            document.body.style.overflow = "hidden"; // Evita que la página haga scroll atrás
+        }
+
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    </script>
 
 </body>
 </html>
