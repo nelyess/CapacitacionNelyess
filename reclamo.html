@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NELYESS - Reclamos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            /* PALETA SUTIL Y PROFESIONAL */
+            --main-navy: #1e293b;
+            --primary-accent: rgba(3, 105, 161, 0.85);
+            --primary-accent-solid: #0369a1;
+            --soft-bg-accent: rgba(224, 242, 254, 0.4);
+            --subtle-gold: rgba(250, 204, 21, 0.6);
+            --subtle-gold-solid: #f59e0b;
+            --text-dark: #0f172a; 
+            --text-gray: #334155; 
+            --text-on-accent: #ffffff;
+            --bg-page: #f1f5f9;
+            --card-bg-glass: rgba(255, 255, 255, 0.95);
+            --red-alert-subtle: rgba(239, 68, 68, 0.8);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* AUMENTO GENERAL DE TAMAÑO Y LÍNEA PARA ESTUDIO */
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-page); 
+            color: var(--text-dark); 
+            line-height: 1.8; 
+            font-size: 16px; 
+            padding-bottom: 60px; 
+        }
+
+        nav { background: var(--main-navy); padding: 15px 5%; position: sticky; top: 0; z-index: 10000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-back { color: white; text-decoration: none; font-weight: bold; font-size: 1rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase; transition: 0.3s; }
+        .btn-back:hover { opacity: 0.8; }
+
+        .container { max-width: 1150px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 45px; }
+
+        /* BANNER INICIAL */
+        .banner-reclamos { background: linear-gradient(135deg, var(--primary-accent-solid) 0%, #cbd5e1 100%); border-radius: 16px; padding: 40px 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; }
+        .banner-reclamos::after { content: '\f013'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -20px; top: -50px; font-size: 250px; color: rgba(255, 255, 255, 0.1); z-index: 1; }
+        .banner-text { position: relative; z-index: 2; color: white; line-height: 1.1; }
+        .banner-light { font-size: 2.4rem; font-weight: 500; display: block; }
+        .banner-bold { font-size: 3.2rem; font-weight: 900; display: block; margin-top: 5px; }
+
+        /* TARJETAS GLOBALES */
+        .content-card { background: var(--card-bg-glass); border-radius: 16px; padding: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(5px); }
+        .title-pill { background-color: var(--primary-accent); color: var(--text-on-accent); padding: 15px 45px; border-radius: 0 35px 35px 0; display: inline-block; font-size: 1.7rem; font-weight: 900; margin-left: -50px; margin-bottom: 30px; box-shadow: 2px 4px 10px rgba(3, 105, 161, 0.1); text-transform: uppercase;}
+        
+        /* TEXTOS GRANDES PARA ESTUDIAR */
+        .text-subtitle { color: var(--primary-accent-solid); font-weight: 800; font-size: 1.4rem; margin-bottom: 15px; }
+        .text-body { color: var(--text-gray); font-weight: 500; font-size: 1.2rem; text-align: justify; margin-bottom: 20px; line-height: 1.8; }
+        
+        .num-list { padding-left: 25px; color: var(--text-gray); font-weight: 500; font-size: 1.15rem; display: flex; flex-direction: column; gap: 15px; margin-top: 15px;}
+        .num-list li { text-align: justify; padding-left: 10px; line-height: 1.8; }
+        .num-list strong { color: var(--text-dark); font-weight: 800; }
+
+        /* SECCIÓN 1: PROCESOS REGULATORIOS */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .blue-text-content { color: var(--primary-accent-solid); font-size: 1.25rem; font-weight: 600; text-align: justify; line-height: 1.8; }
+        .support-img { width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); object-fit: cover; display: block; }
+        .title-pill-obj { background-color: var(--primary-accent); color: var(--text-on-accent); padding: 12px 25px; border-radius: 30px; display: flex; align-items: center; justify-content: space-between; font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; }
+        .yellow-arrow-icon { background-color: var(--subtle-gold); color: var(--main-navy); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .obj-list { list-style-type: disc; padding-left: 30px; color: var(--primary-accent-solid); font-weight: 600; font-size: 1.2rem; line-height: 1.8; gap: 10px; display: flex; flex-direction: column;}
+
+        /* SECCIÓN 2: BOTONES */
+        .process-buttons-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; justify-items: center; margin-top: 25px; }
+        .btn-pill-large { background-color: white; color: var(--primary-accent-solid); font-weight: 800; font-size: 1.15rem; text-align: center; padding: 18px 25px; border-radius: 40px; width: 100%; max-width: 450px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border: 2px solid var(--primary-accent-solid); transition: 0.3s; }
+        .btn-pill-large:hover { transform: translateY(-2px); background-color: var(--primary-accent); color: white; }
+        .btn-pill-center { grid-column: 1 / -1; max-width: 550px; }
+
+        /* SECCIÓN 3: ETAPAS */
+        .etapas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; position: relative; }
+        .etapas-grid::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background-color: #e2e8f0; transform: translateX(-50%); }
+        .etapa-col { display: flex; flex-direction: column; gap: 20px; }
+        .etapa-title { color: var(--primary-accent-solid); font-weight: 900; font-size: 1.3rem; }
+        .etapa-text { color: var(--text-gray); font-size: 1.15rem; font-weight: 500; text-align: justify; line-height: 1.8; }
+        .etapa-text strong { font-weight: 800; color: var(--text-dark); }
+        .etapa-img { width: 80%; max-width: 280px; margin: 25px auto 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* SECCIÓN 4: FLUJOGRAMA MODERNO */
+        .modern-flow { display: flex; flex-direction: column; align-items: center; width: 100%; background: var(--soft-bg-accent); padding: 40px 20px; border-radius: 16px; border: 1px solid #bae6fd; }
+        .f-node { background: white; border: 2px solid var(--primary-accent-solid); border-radius: 12px; padding: 15px 25px; text-align: center; font-weight: 800; color: var(--primary-accent-solid); box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 1.1rem; width: 100%; max-width: 300px; transition: 0.3s;}
+        .f-node:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(3, 105, 161, 0.1); }
+        .f-node.ticket { background: linear-gradient(135deg, var(--subtle-gold-solid), #f59e0b); color: var(--main-navy); border: none; font-size: 1.4rem; padding: 20px 40px; text-transform: uppercase; font-weight: 900; max-width: 400px;}
+        .f-node.yellow { background: white; border-color: var(--subtle-gold-solid); color: var(--text-dark); font-weight: 900; }
+        .f-node.list { text-align: left; font-size: 1.05rem; padding: 20px; font-weight: 600; color: var(--text-gray); line-height: 1.6;}
+        .f-node.list ul { padding-left: 20px; margin: 0; }
+        .f-node.list li { margin-bottom: 8px; }
+        .f-arrow { color: #94a3b8; font-size: 1.5rem; margin: 15px 0; }
+        .f-branches { display: flex; justify-content: center; gap: 25px; width: 100%; margin-top: 15px; align-items: flex-start; flex-wrap: wrap; }
+        .f-col { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 260px; }
+        .trasu-footer { margin-top: 40px; padding: 20px 30px; background: white; border-radius: 12px; border-left: 6px solid var(--subtle-gold-solid); font-size: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center;}
+        .trasu-footer span { color: var(--subtle-gold-solid); font-weight: 900; }
+        .trasu-footer strong { color: var(--primary-accent-solid); font-weight: 800; }
+
+        /* LISTAS CON ICONOS (TAMAÑOS AUMENTADOS) */
+        .icon-list-item { display: flex; align-items: flex-start; gap: 20px; text-align: justify; color: var(--text-gray); font-weight: 500; font-size: 1.15rem; line-height: 1.8; margin-bottom: 20px; }
+        .icon-list-item i { color: var(--primary-accent-solid); font-size: 1.2rem; margin-top: 6px; flex-shrink: 0; background: var(--soft-bg-accent); padding: 12px; border-radius: 50%; border: 1px solid #bae6fd;}
+        .icon-list-item strong { color: var(--text-dark); font-weight: 800; }
+
+        /* BANNERS AMARILLOS */
+        .banner-yellow-center { background: linear-gradient(135deg, var(--subtle-gold), #fef08a); padding: 50px; text-align: left; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin: 50px 0; border: 1px solid rgba(255,255,255,0.3); }
+        .banner-yellow-center h1 { color: var(--main-navy); font-size: 2.8rem; font-weight: 900; line-height: 1.1; margin: 0; }
+
+        /* QUIEN PUEDE PRESENTARLO */
+        .cards-3-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 35px; margin-top: 60px; }
+        .person-card { background: white; color: var(--text-dark); border-radius: 16px; padding: 70px 30px 40px; text-align: center; position: relative; font-weight: 600; font-size: 1.15rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.03); margin-top: 40px; border: 1px solid #e2e8f0; border-bottom: 6px solid var(--subtle-gold-solid); line-height: 1.7;}
+        .person-img-circle { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 120px; height: 120px; border-radius: 50%; border: 6px solid white; background-color: white; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .person-img-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* CANALES DE ATENCIÓN */
+        .channels-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 30px; }
+        .channel-column { background: var(--soft-bg-accent); border: 1px solid #bae6fd; border-radius: 16px; padding: 40px 30px; display: flex; flex-direction: column; align-items: center; }
+        .channel-title { color: var(--primary-accent-solid); font-size: 2rem; font-weight: 900; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
+        .hub-title { background: white; padding: 12px 30px; border-radius: 30px; font-weight: 800; color: var(--text-dark); box-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 35px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 10px; font-size: 1.15rem;}
+        .channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; }
+        .c-card { background: white; border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; gap: 15px; border-bottom: 4px solid var(--primary-accent-solid); border: 1px solid #e2e8f0; transition: 0.3s; }
+        .c-card:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .c-card.yellow { border-bottom-color: var(--subtle-gold-solid); }
+        .c-card i { font-size: 2.2rem; color: var(--primary-accent-solid); }
+        .c-card.yellow i { color: var(--subtle-gold-solid); }
+        .c-card span { font-weight: 800; color: var(--text-dark); font-size: 1.05rem; }
+        .c-card.disabled { background: rgba(241, 245, 249, 0.8); border-bottom-color: #cbd5e1; position: relative; overflow: hidden; opacity: 0.7; }
+        .c-card.disabled i { color: #94a3b8; }
+        .c-card.disabled span { color: #64748b; text-decoration: line-through; }
+        .c-card.disabled::after { content: '\f05e'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; font-size: 4rem; color: var(--red-alert-subtle); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+
+        /* =========================================================================
+           NUEVOS BLOQUES - DISEÑOS 100% RESPONSIVOS SIN DESLIZADORES HORIZONTALES
+           ========================================================================= */
+
+        /* 1. PROTOCOLO DE RECEPCIÓN (Envoltura automática) */
+        .protocol-wrap { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; margin-top: 30px; }
+        .p-node { background: white; border: 2px solid var(--primary-accent-solid); border-radius: 10px; padding: 18px; flex: 1 1 200px; min-width: 220px; max-width: 320px; font-size: 1rem; font-weight: 700; color: var(--primary-accent-solid); text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+
+        /* 2. PLAZOS DE ATENCIÓN ART 58 (Grid adaptable) */
+        .plazos-art-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; align-items: start; margin-top: 25px; }
+        .plazo-col-new { display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 15px; }
+        .p-header-navy { background: var(--main-navy); color: white; padding: 15px 25px; border-radius: 8px; font-weight: 800; font-size: 1.05rem; text-align: center; width: 100%; }
+        .p-body-list { background: var(--soft-bg-accent); border: 2px solid var(--primary-accent-solid); border-radius: 12px; padding: 20px; color: var(--text-dark); font-size: 0.95rem; font-weight: 600; width: 100%; line-height: 1.7;}
+        .p-body-list ol { padding-left: 20px; margin: 0; }
+        .p-body-list li { margin-bottom: 10px; }
+
+        /* 3. TABLA MATERIAS RECLAMABLES (100% Flexible, Cero Scroll) */
+        .custom-materia-table { display: flex; flex-direction: column; width: 100%; background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; margin-top: 30px; }
+        .cm-header { display: flex; background: var(--primary-accent-solid); color: white; font-weight: 800; font-size: 1.05rem; text-transform: uppercase; }
+        .cm-header-col1 { width: 35%; padding: 20px; border-right: 1px solid rgba(255,255,255,0.2); }
+        .cm-header-col2 { width: 35%; padding: 20px; border-right: 1px solid rgba(255,255,255,0.2); }
+        .cm-header-col3 { width: 30%; padding: 20px; }
+
+        .cm-row { display: flex; border-bottom: 2px solid #cbd5e1; }
+        .cm-row:last-child { border-bottom: none; }
+        .cm-materia-title { width: 35%; padding: 20px; font-weight: 800; color: var(--primary-accent-solid); background: #f8fafc; border-right: 1px solid #e2e8f0; font-size: 1rem; line-height: 1.6; }
+        .cm-sub-container { width: 65%; display: flex; flex-direction: column; }
+        
+        .cm-sub-row { display: flex; border-bottom: 1px solid #e2e8f0; flex: 1; }
+        .cm-sub-row:last-child { border-bottom: none; }
+        .cm-sub-motivo { width: 53.8%; padding: 20px; font-weight: 700; color: var(--text-dark); font-size: 0.95rem; border-right: 1px solid #e2e8f0; line-height: 1.6; }
+        .cm-casuistica { width: 46.2%; padding: 20px; font-weight: 500; color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; }
+
+        .materia-note { font-size: 0.9rem; color: var(--text-gray); font-weight: 500; margin-top: 15px; display: block; line-height: 1.6;}
+        .materia-ejm { font-size: 0.9rem; color: var(--subtle-gold-solid); font-weight: 700; margin-top: 15px; display: block; line-height: 1.6;}
+
+        /* 4. VALIDACIÓN DE IDENTIDAD */
+        .val-tree-container { background: var(--soft-bg-accent); border-radius: 16px; padding: 35px; margin-bottom: 40px; display: flex; flex-direction: column; gap: 25px; border: 1px solid #bae6fd;}
+        .val-root { display: flex; align-items: center; justify-content: center; background: var(--primary-accent-solid); color: white; padding: 18px 40px; border-radius: 12px; font-weight: 900; font-size: 1.3rem; align-self: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+        .val-branches { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+        .val-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; background: white; padding: 20px 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .val-step { font-weight: 800; color: var(--primary-accent-solid); flex: 1 1 200px; font-size: 1.15rem;}
+        .val-result { font-weight: 600; color: var(--text-dark); flex: 2 1 300px; font-size: 1.15rem;}
+        .val-badge { background: var(--subtle-gold-solid); color: white; padding: 8px 20px; border-radius: 25px; font-weight: 800; font-size: 1rem; text-align: center; }
+
+        /* 5. IDENTIFICAR EL SERVICIO */
+        .serv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
+        .serv-box { display: flex; align-items: center; justify-content: space-between; background: white; border: 2px solid var(--subtle-gold-solid); padding: 20px 30px; border-radius: 12px; font-weight: 800; color: var(--primary-accent-solid); font-size: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.03);}
+        
+        .modern-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; margin-top: 30px; }
+        .modern-table th { background: var(--primary-accent-solid); color: white; padding: 18px 20px; text-align: left; font-size: 1.05rem; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.2); }
+        .modern-table th:last-child { border-right: none; }
+        .modern-table td { padding: 18px 20px; border-bottom: 1px solid #e2e8f0; font-size: 1rem; font-weight: 600; color: var(--text-gray); border-right: 1px solid #e2e8f0; vertical-align: top; line-height: 1.7;}
+
+        /* ALCANCES ART 55 (GRID) */
+        .alcances-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; align-items: center; margin-top: 30px; }
+        .alcance-box { background: var(--primary-accent-solid); color: white; border-radius: 12px; padding: 30px 25px; text-align: center; font-weight: 600; font-size: 1.15rem; height: 100%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); line-height: 1.7;}
+
+        /* MEDIA QUERIES PARA CELULARES (Garantizando Cero Scroll Horizontal) */
+        @media (max-width: 768px) {
+            .content-card { padding: 30px 20px; }
+            .title-pill { margin-left: -20px; padding: 12px 25px; font-size: 1.4rem; }
+            .banner-light { font-size: 1.8rem; }
+            .banner-bold { font-size: 2.2rem; }
+            .etapas-grid::after { display: none; }
+            .f-branches { flex-direction: column; align-items: center; }
+            .modern-table td, .modern-table th { padding: 15px; font-size: 1rem; }
+            
+            /* Arreglo específico para la tabla gigante en móvil */
+            .cm-header { display: none; } /* Ocultar cabeceras en móvil */
+            .cm-row { flex-direction: column; border-bottom: 4px solid var(--primary-accent-solid); }
+            .cm-materia-title { width: 100%; border-right: none; border-bottom: 2px solid var(--subtle-gold-solid); font-size: 1.1rem; padding: 20px; }
+            .cm-sub-container { width: 100%; }
+            .cm-sub-row { flex-direction: column; border-bottom: 2px dashed #cbd5e1; }
+            .cm-sub-motivo { width: 100%; border-right: none; border-bottom: 1px solid #f1f5f9; padding: 20px; font-size: 1rem; }
+            .cm-sub-motivo::before { content: "Sub Motivo: "; color: var(--primary-accent-solid); font-weight: 900; display: block; margin-bottom: 5px; }
+            .cm-casuistica { width: 100%; padding: 20px; font-size: 1rem; }
+            .cm-casuistica::before { content: "Casuística: "; color: var(--subtle-gold-solid); font-weight: 900; display: block; margin-bottom: 5px; }
+            
+            .alcances-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="posventa.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER A POSVENTA</a>
+    <span style="color: white; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; font-size: 1.1rem;">Nelyess Operativo</span>
+</nav>
+
+<div class="container">
+
+    <div class="banner-reclamos">
+        <div class="banner-text">
+            <span class="banner-light">Procesos</span>
+            <span class="banner-light">Regulatorios:</span>
+            <span class="banner-bold">Reclamos</span>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Procesos Regulatorios</div>
+        <div class="info-grid">
+            <div class="blue-text-content">
+                Son un conjunto de normativas, políticas y procedimientos establecidos por el organismo regulador para supervisar y gestionar la operación de los servicios de telecomunicaciones.
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=600&q=80" alt="Supervisión" class="support-img">
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Unión de equipo" class="support-img">
+            </div>
+            <div>
+                <div class="title-pill-obj">Objetivos <div class="yellow-arrow-icon"><i class="fas fa-chevron-left"></i></div></div>
+                <ul class="obj-list">
+                    <li>Eficiencia</li>
+                    <li>Competencia</li>
+                    <li>Calidad de servicio</li>
+                    <li>protección de los derechos de los usuarios</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Procesos Regulatorios</div>
+        <div class="process-buttons-grid">
+            <div class="btn-pill-large btn-pill-center">Reclamo en 1era Instancia</div>
+            <div class="btn-pill-large">Recurso de Apelación / queja</div>
+            <div class="btn-pill-large">Copia de Expediente de Reclamos</div>
+            <div class="btn-pill-large">Cuestionamiento Bloqueo de Equipo</div>
+            <div class="btn-pill-large">Copia de Expediente de Reclamaciones</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Etapas del Procedimiento de Reclamo</div>
+        <div class="etapas-grid">
+            <div class="etapa-col">
+                <div class="etapa-title">Artículo 22° TUO del Reglamento de Reclamos</div>
+                <div class="etapa-text"><strong>Primera Instancia:</strong> Etapa en la cual la resolución está a cargo de la empresa operadora.</div>
+                <div class="etapa-text">La empresa operadora es el órgano de resolución en primera instancia administrativa de los reclamos presentados por los usuarios con relación a los servicios que presta, conforme al presente reglamento.</div>
+                <img src="https://i.postimg.cc/W1nnxtZS/image.png" alt="Tienda Bitel" class="etapa-img" style="border: 4px solid var(--subtle-gold-solid);">
+            </div>
+            <div class="etapa-col">
+                <div class="etapa-title">Artículo 24° TUO del Reglamento de Reclamos</div>
+                <div class="etapa-text"><strong>Segunda Instancia:</strong> Etapa en la cual la resolución está a cargo del OSIPTEL, a través del Tribunal Administrativo de Solución de Reclamos a Usuarios.</div>
+                <div class="etapa-text">El TRASU es el órgano de resolución en segunda instancia administrativa de los reclamos presentados por los usuarios. Asimismo, conoce las quejas presentadas por los usuarios.</div>
+                <img src="https://i.postimg.cc/DyQdbmx3/image.png" alt="Edificio OSIPTEL" class="etapa-img">
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Flujo</div>
+        <div class="modern-flow">
+            <div class="f-node ticket"><i class="fas fa-ticket-alt"></i> TICKET DE RECLAMO</div>
+            <i class="fas fa-arrow-down f-arrow"></i>
+            <div class="f-branches">
+                <div class="f-col">
+                    <div class="f-node">SAR</div>
+                    <i class="fas fa-arrow-down f-arrow"></i>
+                    <div class="f-node" style="font-weight: 600;">Recargas o Ajustes</div>
+                </div>
+
+                <div class="f-col">
+                    <div class="f-node">Reclamo<br><span style="color:var(--primary-accent-solid); font-size:0.85em;">osiptel</span></div>
+                    <i class="fas fa-arrow-down f-arrow"></i>
+                    <div class="f-branches" style="gap: 15px;">
+                        <div class="f-col" style="min-width: 150px;">
+                            <div class="f-node yellow">bitel</div>
+                            <i class="fas fa-arrow-down f-arrow"></i>
+                            <div class="f-node">1era Instancia</div>
+                            <i class="fas fa-arrow-down f-arrow"></i>
+                            <div class="f-node">Materias<br>Reclamables</div>
+                        </div>
+                        <div class="f-col" style="min-width: 250px;">
+                            <div class="f-node">TRASU</div>
+                            <i class="fas fa-arrow-down f-arrow"></i>
+                            <div class="f-node" style="font-size: 0.9rem; padding: 10px;">Recursos<br>Impugnatorios</div>
+                            <i class="fas fa-arrow-down f-arrow"></i>
+                            <div class="f-branches" style="gap: 15px;">
+                                <div class="f-col" style="min-width:140px;">
+                                    <div class="f-node">Recurso de<br>Apelación<br><span style="font-size:0.8em;">2da Instancia</span></div>
+                                </div>
+                                <div class="f-col" style="min-width:280px;">
+                                    <div class="f-node">Recurso de<br>Queja</div>
+                                    <i class="fas fa-arrow-down f-arrow"></i>
+                                    <div class="f-node list">
+                                        <ul>
+                                            <li>No contestar o negarse a generar o a entregar un reclamo,queja o apelación.</li>
+                                            <li>Negativa a recibir el pago a cuenta del monto que no es materia de reclamo</li>
+                                            <li>Requerimiento del pago del monto reclamado.</li>
+                                            <li>Suspensión del servicio a pesar de tener reclamoen trámite.</li>
+                                            <li>Aplicación del SAP (silencio administrativo positivo)</li>
+                                            <li>Cuando no se elevela apelación.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="f-col">
+                    <div class="f-node">Reclamación<br><span style="color:var(--subtle-gold-solid); font-size:0.85em;">Indecopi</span></div>
+                    <i class="fas fa-arrow-down f-arrow"></i>
+                    <div class="f-node">Libro de<br>Reclamaciones <i class="fas fa-book-open" style="color:#94a3b8;"></i></div>
+                    <i class="fas fa-arrow-down f-arrow"></i>
+                    <div class="f-branches" style="gap: 15px;">
+                        <div class="f-col" style="min-width: 220px;">
+                            <div class="f-node">Reclamo</div>
+                            <i class="fas fa-arrow-down f-arrow"></i>
+                            <div class="f-node list">
+                                <ul>
+                                    <li>Equipo (SS.TT.)</li>
+                                    <li>Disconformidad politicas</li>
+                                    <li>Publicidad engañosa</li>
+                                    <li>Sugerencias</li>
+                                    <li>Inconveniente con los medios de pago</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="f-col" style="min-width: 220px;">
+                            <div class="f-node">Queja</div>
+                            <i class="fas fa-arrow-down f-arrow"></i>
+                            <div class="f-node list">
+                                <ul>
+                                    <li>Disconformidad por atención presencial</li>
+                                    <li>Tiempo de espera</li>
+                                    <li>Trato inadecuado, falta de personal.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="trasu-footer">
+            <span>TRASU : </span><strong>Tribunal Administrativo de Solución de Reclamos</strong>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Plazos para la Presentación de Reclamos</div>
+        <div class="text-block">
+            <div class="text-subtitle">Artículo 55° TUO de Reglamento de Reclamos</div>
+            <div class="text-body" style="font-weight: 700; color: var(--primary-accent-solid);">El usuario puede presentar su reclamo ante la empresa operadora en los siguientes plazos, según el objeto de reclamo;</div>
+            <div class="text-body" style="margin-top: 20px;">En aquellos reclamos en los cuales se involucre una facturación o cobro:</div>
+            <ol class="num-list">
+                <li>Hasta un (1) año después de la fecha de vencimiento del recibo que contiene el concepto reclamado.</li>
+                <li>Hasta un (1) año después de requerido el cobro por el concepto reclamado o de notificado el documento donde se consigna el cobro de los montos supuestamente adeudados.</li>
+                <br>
+                <li value="3">En los demás casos en tanto subsista el hecho que motiva el reclamo.</li>
+            </ol>
+            <div class="text-body" style="margin-top: 25px;">Una vez vencidos los plazos previstos en el presente artículo, el usuario tiene expedito su derecho para recurrir directamente a la vía judicial o arbitral, por los conceptos mencionados anteriormente.</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Prácticas Prohibidas en Reclamos</div>
+        <div class="text-block">
+            <div class="text-subtitle">Artículo 8° TUO del Reglamento de Reclamos</div>
+            <ol class="num-list" style="margin-top: 15px;">
+                <li>Impedir o negar la presentation de reclamos, recursos y quejas, bajo cualquiera de las formas establecidas en el presente Reglamento.</li>
+                <li>Emitir opinión previa con relación al resultado del procedimiento.</li>
+                <li>Impedir o negar el acceso al expediente, si el usuario lo solicitara.</li>
+                <li>Omitir proporcionar al usuario el código o número de reclamo, recurso o queja, al momento de su presentación o si el usuario lo solicitara.</li>
+                <li>Omitir brindar información al usuario sobre la ubicación del expediente y el estado del trámite, si el usuario lo solicitara.</li>
+                <li>Omitir expedir copias simples o certificadas del íntegro o parte del expediente, si el usuario lo solicitara, siempre que se sujete a lo establecido en el tercer párrafo del artículo 10.</li>
+                <li>Impedir y/o negar la autorización al usuario del pago de la parte no reclamada; o no permitir el pago de la parte no reclamada</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Información a Brindar al Usuario</div>
+        <div class="text-block">
+            <div class="text-subtitle">Artículo 16° TUO del Reglamento de Reclamos</div>
+            <div class="text-body">La empresa operadora tiene la obligación de brindar, en cualquier momento que el usuario lo solicite, información clara, veraz, detallada y precisa, como mínimo, sobre:</div>
+            <ol class="num-list" style="margin-top: 15px;">
+                <li>El procedimiento que debe seguirse para presentar reportes, reclamos, recursos de apelación y quejas, incluyendo los requisitos, plazos e instancias correspondientes.</li>
+                <li>La lista y descripción detallada de los medios probatorios que pueden actuarse para la solución de los reclamos, aprobados por el TRASU.</li>
+                <li>La lista y descripción detallada de los precedentes de observancia obligatoria emitidos por el TRASU.</li>
+                <li>La obligación de los usuarios de realizar el pago del monto no reclamado, debiendo informar, adicionalmente, su importe y los canales donde se debe realizar el pago del monto no reclamado. La empresa operadora debe habilitar medios físicos y virtuales para realizar el pago del monto no reclamado.</li>
+                <li>Los formularios de presentación de reclamos, recursos de apelación y quejas, durante la atención presencial.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="banner-yellow-center">
+        <h1>Reclamos en Primera Instancia</h1>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Reclamo en 1era Instancia</div>
+        <div class="text-block">
+            <div class="text-body">Un reclamo se refiera a aquella manifestación por parte del cliente de un problema con su servicio de telecomunicación, la misma que es presentado y resuelto en primera instancia por la empresa operadora y por medio de la cual se espera brindar una solución y respuesta motivada al problema presentado. Se pueden considerar como problemas bajo este supuesto:</div>
+            <ul class="obj-list" style="margin-top: 25px;">
+                <li>Lentitud con el servicio del internet</li>
+                <li>Cargo incorrecto en la factura</li>
+                <li>La no instalación del servicio contratado</li>
+                <li>Recarga no efectuada por la empresa operadora</li>
+                <li>Otros que se encuentren relacionados con el servicio</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">¿Quién puede presentarlo?</div>
+        <div class="cards-3-grid">
+            <div class="person-card">
+                <div class="person-img-circle"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Abonado"></div>
+                Abonados de servicios públicos de telecomunicaciones
+            </div>
+            <div class="person-card">
+                <div class="person-img-circle"><img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=200&q=80" alt="Usuario"></div>
+                Usuarios de los servicios públicos de telecomunicaciones
+            </div>
+            <div class="person-card">
+                <div class="person-img-circle"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=200&q=80" alt="Persona"></div>
+                Personas que hubieran solicitado la instalación o activación de un servicio público de telecomunicaciones
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Canales de Atención</div>
+        <div class="channels-wrapper">
+            <div class="channel-column">
+                <div class="channel-title">Abonados</div>
+                <div class="hub-title"><i class="fas fa-cogs" style="color:var(--primary-accent-solid);"></i> Servicios Móviles</div>
+                <div class="channel-grid">
+                    <div class="c-card yellow"><i class="fas fa-phone-alt"></i><span>Telefónico</span></div>
+                    <div class="c-card"><i class="fas fa-file-signature"></i><span>Por Escrito</span></div>
+                    <div class="c-card"><i class="fas fa-globe"></i><span>Página Web</span></div>
+                    <div class="c-card yellow"><i class="fas fa-user"></i><span>Presencial</span></div>
+                </div>
+            </div>
+            <div class="channel-column">
+                <div class="channel-title">Usuarios</div>
+                <div class="hub-title"><i class="fas fa-cogs" style="color:var(--primary-accent-solid);"></i> Servicios Móviles</div>
+                <div class="channel-grid">
+                    <div class="c-card disabled"><i class="fas fa-phone-alt"></i><span>Telefónico</span></div>
+                    <div class="c-card"><i class="fas fa-file-signature"></i><span>Por Escrito</span></div>
+                    <div class="c-card disabled"><i class="fas fa-globe"></i><span>Página Web</span></div>
+                    <div class="c-card yellow"><i class="fas fa-user"></i><span>Presencial</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Protocolo de Recepción de Reclamos</div>
+        <div class="protocol-wrap">
+            <div class="p-node">1.Detección del inconveniente (en caso sea sobre calidad del servicio debera seguirse el proceso de reporte de avería).</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">2. Detección del tipo de servicio</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">2.1 Protocolo de validación de abonado o usuario (aplica sólo para telefonía móvil). Ofrecer SAR.</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">3. Acceso a la opción de reclamos del BCCS (en el servicio reclamado)</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">4. Completar la información requerida por el BCCS, según la materia.</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">5. Emisión del formulario digital.</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">6. Entrega del cargo del formulario digital, incluyendo el sello del Cab, nombre del personal que atendió al usuario.</div>
+            <i class="fas fa-arrow-right p-arrow"></i>
+            <div class="p-node">7. El sistema enviará el formulario por correo (sí el cliente lo solicitó en la etapa de registro).</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Plazos de Atención</div>
+        <div class="text-subtitle" style="text-align: center; font-size: 1.6rem; margin-bottom: 35px;">Artículo 58°</div>
+        
+        <div style="display: flex; align-items: stretch; gap: 30px;">
+            <div style="display:flex; flex-direction:column; justify-content: center; align-items:center; color:var(--text-gray); font-weight:800; font-size:1rem; line-height:2;">
+                <span>F</span><span>L</span><span>U</span><span>J</span><span>O</span><span>G</span><span>R</span><span>A</span><span>M</span><span>A</span>
+                <span style="margin: 15px 0;">D</span><span style="margin-bottom:15px;">E</span>
+                <span>R</span><span>E</span><span>C</span><span>L</span><span>A</span><span>M</span><span>O</span>
+            </div>
+            
+            <div class="plazos-art-grid" style="flex:1; margin-top: 0;">
+                <div class="plazo-col-new" style="background: transparent; border: none; box-shadow: none; padding: 0;">
+                    <div style="font-weight:900; color:var(--text-dark); background:white; padding:15px 25px; border-radius:8px; border:2px solid var(--primary-accent-solid); font-size: 1.15rem;">03 dias útiles</div>
+                    <i class="fas fa-arrow-down p-arrow" style="color: var(--primary-accent-solid);"></i>
+                    <div class="p-body-list">
+                        <ol>
+                            <li>Calidad e idoneidad en la prestación del servicio.</li>
+                            <li>Falta de servicio.</li>
+                            <li>Baja o suspensión del servicio no solicitada.</li>
+                            <li>Portabilidad.</li>
+                            <li>Falta de entrega de recibos, facturación detallada (llamadas salientes) o llamadas entrantes.</li>
+                        </ol>
+                    </div>
+                    <div style="color: var(--red-alert-subtle); font-weight:800; font-size: 1.05rem; margin-top: 15px; text-align: center; line-height: 1.5;">
+                        * Monto de Deuda<br>
+                        Unidad impositiva Tributaria en el año 2025<br>
+                        (UIT) = S/ 5,350
+                    </div>
+                </div>
+
+                <div class="plazo-col-new" style="background: transparent; border: none; box-shadow: none; padding: 0;">
+                    <div class="p-header-navy">Reclamo en 1era. Instancia</div>
+                    <div class="p-header-navy" style="margin-top: -10px;">Resolución</div>
+                    <i class="fas fa-arrow-down p-arrow" style="color: var(--text-dark);"></i>
+                    <div style="font-weight:900; color:var(--text-dark); background:white; padding:15px 25px; border-radius:8px; border:2px solid var(--primary-accent-solid); font-size: 1.15rem;">15 dias útiles</div>
+                    <i class="fas fa-arrow-down p-arrow" style="color: var(--primary-accent-solid);"></i>
+                    <div class="p-body-list" style="background: var(--primary-accent-solid); color: white; border: none;">
+                        <ol style="color: white;">
+                            <li>Facturación y cobro cuyo monto reclamado sea de hasta 0.5 % de la Unidad Impositiva Tributaria.</li>
+                            <li>Recargas.</li>
+                            <li>Instalación, activación o traslado del servicio.</li>
+                        </ol>
+                    </div>
+                    <div class="p-header-navy" style="margin-top: -10px; background: var(--primary-accent-solid); border-top: 1px solid rgba(255,255,255,0.2);">Notificación</div>
+                    <i class="fas fa-arrow-down p-arrow" style="color: var(--text-dark);"></i>
+                    <div style="font-weight:900; color:var(--text-gray); font-size: 1.15rem;">05 dias útiles</div>
+                    <i class="fas fa-arrow-down p-arrow" style="color: var(--text-dark);"></i>
+                    <div style="display: flex; align-items: center; gap: 20px; width: 100%;">
+                        <div class="p-header-navy" style="flex: 1;">Apelación (2da Instancia)</div>
+                        <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark); max-width: 140px; line-height: 1.4;">15 dias útiles para presentar la apelación</div>
+                    </div>
+                </div>
+
+                <div class="plazo-col-new" style="background: transparent; border: none; box-shadow: none; padding: 0;">
+                    <div style="font-weight:900; color:var(--text-dark); background:white; padding:15px 25px; border-radius:8px; border:2px solid var(--primary-accent-solid); font-size: 1.15rem;">20 dias útiles</div>
+                    <i class="fas fa-arrow-down p-arrow" style="color: var(--primary-accent-solid);"></i>
+                    <div class="p-body-list">
+                        <ol>
+                            <li>Facturación y Cobro (deuda mayor o igual a 0.5 UIT)</li>
+                            <li>Incumplimiento de condiciones contractuales, ofertas y promociones.</li>
+                            <li>Migración</li>
+                            <li>Contratación No Solicitada</li>
+                            <li>Otras materias reclamables</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Identificar Materia Reclamable</div>
+        
+        <div class="text-body" style="color: var(--primary-accent-solid); font-weight: 600;">
+            1. Para identificar el inconveniente reclamado es necesario que escuches la necesidad del cliente. Para ello, puedes preguntar ¿Cuál(es) es (son) los problemas que puede tener?. Luego, deberás verificar si el inconveniente se refiere a un problema con el servicio de telecomunicaciones, derecho protegido por OSIPTEL o si se trata de otro inconveniente.
+        </div>
+        
+        <div class="text-body" style="color: var(--primary-accent-solid); font-weight: 600; margin-top: 25px;">
+            2. Para identificar claramente el inconveniente, puedes realizar algunas de las siguientes preguntas al usuario.
+        </div>
+        
+        <ul class="num-list" style="list-style-type: disc; padding-left: 35px;">
+            <li>¿Cuál es el inconveniente por el que le gustaría reclamar?</li>
+            <li>¿Desde cuándo presenta el inconveniente?</li>
+            <li>¿Tiene información adicional que nos pueda ayudar a solucionar su inconveniente?</li>
+            <li>¿Este inconveniente se ha presentado en algún lugar específico? (por ejemplo, en una localidad que presente inconvenientes de calidad)</li>
+        </ul>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; margin-top: 40px;">
+            <div style="background: var(--primary-accent-solid); color: white; padding: 25px; border-radius: 12px; font-weight: 600; font-size: 1.1rem; text-align: center; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); line-height: 1.7;">
+                Solo existen 11 materias de reclamos y cada una tiene problemas específicos definidos (sub motivos).
+            </div>
+            <i class="fas fa-arrow-right p-arrow" style="color: var(--primary-accent-solid); font-size: 1.5rem;"></i>
+            <div style="background: var(--primary-accent-solid); color: white; padding: 25px; border-radius: 12px; font-weight: 600; font-size: 1.1rem; text-align: center; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); line-height: 1.7;">
+                Algunas han sido renombradas (como Recargas) y otras unidas (como Facturación y Cobro)
+            </div>
+            <i class="fas fa-arrow-right p-arrow" style="color: var(--primary-accent-solid); font-size: 1.5rem;"></i>
+            <div style="background: var(--primary-accent-solid); color: white; padding: 25px; border-radius: 12px; font-weight: 600; font-size: 1.1rem; text-align: center; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); line-height: 1.7;">
+                La materia “Otros” ha sido definida con casuística específica, es decir no se admitirá otro tipo de inconveniente en otros.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">Identificación y Asesoramiento al cliente sobre las 11 materias reclamables</div>
+        
+        <div class="custom-materia-table">
+            <div class="cm-header">
+                <div class="cm-header-col1" style="font-size: 1.2rem;">Materia (Claim Type)</div>
+                <div class="cm-header-col2" style="font-size: 1.2rem;">Sub Motivos</div>
+                <div class="cm-header-col3" style="font-size: 1.2rem;">Casuística Aplicable</div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    1. FACTURACIÓN Y COBRO<br>
+                    <span class="materia-note">
+                        • Esta materia comprende el desacuerdo que tiene el usuario por montos que figuran en el recibo emitido o requerimientos de pago del servicio respecto de:<br>
+                        • El cálculo de los consumos facturados,<br>
+                        • La tarifa aplicada de consumos adicionales facturados,<br>
+                        • El cargo por reconexión,<br>
+                        • Otro monto correspondiente a cualquier concepto facturado en el recibo cuyo consumo se desconoce,<br>
+                        • Pagos no procesados o registrados,<br>
+                        • Montos no facturados oportunamente,<br>
+                        • Cobros de equipos terminales incluido en el recibo por desacuerdo en el monto facturado o por reintegro del descuento de equipos terminales vinculados a la permanencia del servicio público de telecomunicaciones contratado<br>
+                        • La aplicación del incremento tarifario no comunicado previamente al abonado, respecto de los recibos que se emitan hasta el periodo de dos (2) meses desde el vencimiento del primer recibo en que se aplicó dicho incremento.<br><br>
+                        No se incluyen dentro de este concepto aquellas que tengan como sustento la calidad en la prestación del servicio, o cualquiera de las materias señaladas en los siguientes numerales; así como, problemas relacionados a la idoneidad y fallas del equipo terminal.
+                    </span>
+                    <span class="materia-ejm" style="font-size: 1.05rem; line-height: 1.7;">Ejm: Cliente adquiere una línea de S/29.90; sin embargo todos los meses le viene S/.32.00 en su factura.</span>
+                    <span class="materia-ejm" style="font-size: 1.05rem; line-height: 1.7;">Ejm: Cliente desconoce o está en desacuerdo con el cobro de algún paquete adicional facturado.</span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desacuerdo con el cálculo de los consumos facturados</div>
+                        <div class="cm-casuistica">Cuando la sumatoria total de importes, no corresponde..</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desacuerdo con la tarifa aplicada de consumos adicionales facturados</div>
+                        <div class="cm-casuistica">Disconformidad con las tarifada aplicada por consumo realizado.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desacuerdo con el cargo por reconexión</div>
+                        <div class="cm-casuistica">Cobro por el cargo de reconexión.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desacuerdo con otro monto correspondiente a cualquier concepto facturado en el recibo cuyo consumo se desconoce</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona el monto facturado por reconexión del servicio, u otros conceptos como roaming, datos móviles adicionales, servicios adicionales y otros.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Pagos no procesados o registrados</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente menciona haber efectuado el pago de su servicio pero no se verifica en el sistema.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Cobro de montos no facturados oportunamente o realizados por documentos distinto al recibo</div>
+                        <div class="cm-casuistica">Importes asociados a notas de debido (no incluidos en el recibo)</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Cobros de equipos terminales incluido en el recibo por desacuerdo en el monto facturado o por reintegro del descuento de equipos terminales vinculados a la permanencia del servicio público de telecomunicaciones contratado</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona el cobro relacionado a un financiamiento de equipo o penalidad.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Aplicación del incremento tarifario no comunicado previamente al abonado, respecto de los recibos que se emitan hasta el periodo de dos (2) meses desde el vencimiento del primer recibo en que se aplicó dicho incremento</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona el aumento en el cargo fijo de su plan sin solicitud previa.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    2. CALIDAD O IDONEIDAD EN LA PRESTACIÓN DEL SERVICIO<br>
+                    <span class="materia-note">
+                        Esta materia comprende los problemas derivados de una inadecuada prestación del servicio, tales como intermitencia, lentitud, comunicaciones entrecortadas o con ruido, entre otros.
+                    </span>
+                    <span class="materia-ejm" style="font-size: 1.05rem; line-height: 1.7;">Ejm: Problemas para realizar llamadas, envío de mensajes o navegación por internet</span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Inconvenientes con casilla de voz</div>
+                        <div class="cm-casuistica">No puede acceder a su casilla de voz o inconvenientes relacionados</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">No realiza - recibe llamadas</div>
+                        <div class="cm-casuistica">No puede recibir llamadas o no puede realizarlas (incluyendo si se escucha un error)</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Envío - recepción de SMS</div>
+                        <div class="cm-casuistica">No puede recibir o enviar mensajes de texto (cualquiera que fuera el error u origen del SMS)</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Problemas de señal - cobertura</div>
+                        <div class="cm-casuistica">Inconvenientes con cobertura 3G o 4G.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Intermitencia</div>
+                        <div class="cm-casuistica">La señal no es estable y se advierten interrupciones temporales</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Lentitud</div>
+                        <div class="cm-casuistica">La navegación es lenta o más baja de lo esperado</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Comunicaciones entrecortadas o con ruido</div>
+                        <div class="cm-casuistica">Durante las llamadas no se escucha claramente (ya sea al receptor o emisor).</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    3. INCUMPLIMIENTO DE CONDICIONES CONTRACTUALES, OFERTAS Y PROMOCIONES<br>
+                    <span class="materia-note">
+                        Esta materia comprende (i) la aplicación de condiciones y tarifas del plan contratado distintas a las pactadas en el contrato, salvo que se refieran a modificaciones contractuales más beneficiosas o incremento tarifario; (ii) incumplimiento de la oferta o promoción ofrecida, (iii) los descuentos no reconocidos de los atributos y/o beneficios del plan contratado, oferta y/o promoción, y (iv) la omisión de información o información inexacta sobre cobertura u otras características o limitaciones del servicio.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Incumplimiento de la aplicación de condiciones y tarifas del plan contratado distintas a las pactadas en el contrato, salvo que se refieran a modificaciones contractuales más beneficiosas o incremento tarifario</div>
+                        <div class="cm-casuistica">Alguna condición de detalla el contrato o acuerdo comercial y que no se aplica.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Incumplimiento de ofertas o promociones ofrecidas y/o contratadas</div>
+                        <div class="cm-casuistica">Cliente cumple con las condiciones de la promoción y no se le aplica.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Descuentos no reconocidos de los atributos y/o beneficios del plan contratado, oferta y/o promoción</div>
+                        <div class="cm-casuistica">No aplicación de los beneficios por activación o promoción vigente.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Omisión de información o información inexacta sobre cobertura u otras características o limitaciones del servicio</div>
+                        <div class="cm-casuistica">Asociado a información sobre el producto adquirido o comercial.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    4. FALTA DE SERVICIO<br>
+                    <span class="materia-note">
+                        Esta materia comprende; (i) la interrupción, suspensión, corte o baja injustificada del servicio o sin observar el procedimiento establecido en la normativa vigente (ii) la suspensión del servicio por uso prohibido en establecimientos penitenciarios, (iii) la falta de reactivación del servicio pese al pago del recibo y (iv) cambio de titularidad del servicio o reposición de SIM card sin consentimiento del abonado. <strong style="color:var(--main-navy); text-decoration:underline;">No aplica para la suspensión del servicio derivado del bloqueo de equipo.</strong>
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Interrupción, suspensión, corte o baja injustificada del servicio o sin observar el procedimiento establecido en la normativa vigente</div>
+                        <div class="cm-casuistica">Desacuerdo con la suspensión del servicio.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Suspensión del servicio por uso prohibido en establecimientos penitenciarios</div>
+                        <div class="cm-casuistica">Bloqueo de línea por uso prohibido en establecimientos penitenciarios.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de reactivación del servicio pese al pago del recibo</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona la no reactivación del servicio a pesar de haber realizado el pago de su deuda.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Cambio de titularidad del servicio o reposición de SIM CARD sin consentimiento del abonado</div>
+                        <div class="cm-casuistica">Materia especifica sobre el proceso reclamado.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    5. INSTALACIÓN, ACTIVACIÓN O TRASLADO DEL SERVICIO<br>
+                    <span class="materia-note">
+                        Esta materia comprende; (i) la falta de instalación, activación o traslado del servicio solicitado por el abonado por parte de la empresa operadora; (ii) la falta de respuesta a la solicitud de trasladado o negativa a la misma y (iii) la falta de devolución de los montos cobrados por instalación, activación o traslado no ejecutados. Comprende lo referido al servicio principal, así como servicios adicionales o suplementarios, y adquisición de paquetes de tráfico de voz, mensajes de texto y/o datos.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de instalación del servicio fijo</div>
+                        <div class="cm-casuistica">Cliente cuestiona que has la fecha no se activa su línea.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de activación del servicio móvil</div>
+                        <div class="cm-casuistica">Cliente cuestiona que has la fecha no se activa su línea o servicio (paquetes).</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de traslado del servicio</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona que no se ha realizado el traslado del servicio solicitado. Aplica solo para servicios alámbricos como FTTH.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de respuesta a la solicitud de trasladado o negativa a la misma</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona que la empresa operadora no ha respondido a su solicitud de traslado del servicio solicitado o la negativa de la misma. Aplica solo para servicios alámbricos como FTTH.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de devolución de los montos cobrados por instalación, activación o traslado no ejecutados</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona que no se le ha devuelto el monto cobrado por la instalación de un servicio (por ejemplo: importe cobrado por la instalación de un servicio FTTH)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    6. FALTA DE EJECUCIÓN DE BAJA O SUSPENSIÓN DEL SERVICIO<br>
+                    <span class="materia-note">
+                        Esta materia comprende: (i) los problemas relacionados con la falta de ejecución de la baja o suspensión temporal del servicio que hubiere sido solicitado o correspondía ejecutar, (ii) los montos cobrados posteriores a la fecha en que se efectuó la baja o suspensión temporal o correspondía efectuarla.<br><br>
+                        La empresa debe iniciar el procedimiento de baja del servicio en la fecha de presentación del reclamo siempre que éste sea iniciado por el abonado.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de ejecución de la baja</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente solicitó la baja de su línea pero esta no ha sido ejecutada por la EO.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de ejecución de la suspensión temporal del servicio</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente solicitó la suspensión temporal de su línea pero esta no ha sido ejecutada por la EO.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Montos cobrados posteriores a la fecha en que se efectuó la baja o correspondía efectuarla</div>
+                        <div class="cm-casuistica">Aplica a reclamos por importes asociados cuando se solicito la baja de la línea y no se ejecuto.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Montos cobrados posteriores a la fecha en que se efectuó la suspensión temporal o correspondía efectuarla</div>
+                        <div class="cm-casuistica">Aplica a reclamos por importes asociados cuando se solicito la suspensión de la línea y no se ejecuto.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    7. RECARGAS<br>
+                    <span class="materia-note">
+                        Esta materia comprende los problemas en el acceso o prestación del servicio mediante sistemas de tarjetas de pago, tales como, falta de asignación de saldo o atributos, descuentos indebidos de los saldos o del crédito, afiliación a paquetes de adquisición de tráfico u otros promocionales no solicitados que impliquen un descuento del saldo.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de asignación de saldo o atributos</div>
+                        <div class="cm-casuistica">Aplica a casos de recarga realizada y no entregada.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Descuentos indebidos de los saldos o del crédito</div>
+                        <div class="cm-casuistica">Aplica a disconformidad con el consumo de la recarga o saldo (asociado a beneficios del plan tarifario)</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Afiliación a paquetes de adquisición de tráfico u otros promocionales no solicitados que impliquen un descuento del saldo</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona la activación de paquetes que no reconoce haber activado.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    8. CONTRATACIÓN NO SOLICITADA<br>
+                    <span class="materia-note">
+                        Esta materia comprende el desconocimiento del abonado respecto de la contratación del servicio, así como las obligaciones de pago por la prestación del mismo. Se considera lo referido al servicio principal, servicios adicionales o suplementarios, adquisición de paquetes de tráfico o señales de programación, así como, el contrato de adquisición o financiamiento de equipo terminal cuyo pago es incluido en el recibo como concepto facturable.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desconoce contratación del servicio principal</div>
+                        <div class="cm-casuistica">Disconformidad por la contratación del servicio sea prepago o postpago.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desconocimiento de servicios adicionales o suplementarios</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona la contratación de servicios VAS o adicionales.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desconoce adquisición de paquetes de tráfico o señales de programación</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona la activación de paquetes por no haberlos contratado o activado.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Desconoce contrato de adquisición o financiamiento de equipo terminal cuyo pago es incluido en el recibo como concepto facturable</div>
+                        <div class="cm-casuistica">Aplica cuando el cliente cuestiona la contratación de un equipo sin haberlo solicitado, debe haberse adquirido como parte de un plan control o postpago.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    9. MIGRACIÓN<br>
+                    <span class="materia-note">
+                        Esta materia comprende los problemas referidos a: (i) el condicionamiento, negativa o falta de respuesta de la solicitud de migración, (ii) la falta de ejecución de la migración dentro del plazo establecido, (iii) la facturación corresponde al plan anterior, y (iv) la migración no solicitada.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Condicionamiento, negativa o falta de respuesta de la solicitud de migración</div>
+                        <div class="cm-casuistica">Aplica para casos donde se cuestione, nege o no se aplique una migracion de servicio.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de ejecución de la migración dentro del plazo establecido</div>
+                        <div class="cm-casuistica">Aplica para casos donde se solicito la migración y éste no se ejecuto en el plazo señalado.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Facturación corresponde al plan anterior</div>
+                        <div class="cm-casuistica">Aplica a reclamos por importes asociados cuando se solicito un cambio de plan y no se realizó.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Migración no solicitada</div>
+                        <div class="cm-casuistica">Aplica a reclamos por importes o no, asociados a un cambio de plan y este no se solicito.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title">
+                    10. PORTABILIDAD<br>
+                    <span class="materia-note">
+                        Esta materia comprende los problemas relacionados a la portabilidad numérica tales como: (i) la negativa a recibir la solicitud de portabilidad, (ii) el rechazo a la solicitud de portabilidad, (iii) la falta de entrega de información sobre portabilidad, (iv) la falta de consentimiento del abonado para efectuar la portabilidad, (v) la falta de cobertura, y (vi) la falta de retorno del número telefónico.
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Negativa a recibir la solicitud de portabilidad</div>
+                        <div class="cm-casuistica">Cuando al abonado, no se le recibe la solicitud de portabilidad.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Rechazo a la solicitud de portabilidad</div>
+                        <div class="cm-casuistica">Disconformidad por el rechazo de la solicitud de portabilidad</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de entrega de información sobre portabilidad</div>
+                        <div class="cm-casuistica">Asociado a información sobre la portabilidad realizada.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de consentimiento del abonado para efectuar la portabilidad</div>
+                        <div class="cm-casuistica">Disconformidad por la portabilidad realizada a Bitel sea prepago o postpago.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de cobertura</div>
+                        <div class="cm-casuistica">Aplica a casos donde se reclame la cobertura luego de la portabilidad realizada.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de retorno del número telefónico</div>
+                        <div class="cm-casuistica">Aplica a casos, donde exista una resolución que indique el retorno del numero reclamado y éste aun no se ejecuta</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cm-row">
+                <div class="cm-materia-title" style="border-bottom: none;">
+                    11. OTRAS MATERIAS RECLAMABLES<br>
+                    <span class="materia-note">
+                        Se considera como otras materias reclamables de manera taxativa las siguientes: (i) la negativa a contratar el servicio, (ii) la falta de entrega de recibos y (iii) la negativa a brindar la facturación detallada o llamadas entrantes..
+                    </span>
+                </div>
+                <div class="cm-sub-container">
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Negativa a contratar el servicio</div>
+                        <div class="cm-casuistica">Cuando al abonado, no se le permite o recibe la solicitud de contratación.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo">Falta de entrega de recibos</div>
+                        <div class="cm-casuistica">Aplica a casos donde no se hace entrega de los recibos de forma virtual o física.</div>
+                    </div>
+                    <div class="cm-sub-row">
+                        <div class="cm-sub-motivo" style="border-bottom: none;">Negativa a brindar la facturación detallada o llamadas entrantes</div>
+                        <div class="cm-casuistica" style="border-bottom: none;">Relacionado a casos, donde el cliente solicita la entrega del detalle de su facturación detallada o el detalle de sus llamadas entrantes o salientes y esta no se emite.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="title-pill">PLAZOS MÁXIMOS PARA LA PRESENTACIÓN DE RECLAMOS (ALCANCES – ART. 55)</div>
+        
+        <div class="alcances-grid">
+            <div class="alcance-box">
+                Los plazos máximos de presentación de reclamos por facturación y cobro han sido reducidos a 1 año (antes 2 años) desde la fecha de vencimiento del recibo o documento de cobro.
+            </div>
+            <i class="fas fa-arrow-right p-arrow" style="margin: 0 auto; display: block; text-align: center; color: var(--primary-accent-solid); font-size: 1.8rem;"></i>
+            <div class="alcance-box">
+                En caso se excedan los plazos, BITEL declarará IMPROCEDENTE el reclamo.)
+            </div>
+            <i class="fas fa-arrow-right p-arrow" style="margin: 0 auto; display: block; text-align: center; color: var(--primary-accent-solid); font-size: 1.8rem;"></i>
+            <div class="alcance-box">
+                En los demás casos, el plazo será en tanto subsista el inconveniente reclamado.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
