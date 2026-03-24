@@ -292,16 +292,19 @@
             chatBody.scrollTop = chatBody.scrollHeight;
         }
 
-        // Función para leer la página en tiempo real (ignora el texto dentro del propio chat)
-        function obtenerTextoDePagina() {
+        // Extrae las frases completas de la página para respuestas más limpias
+        function obtenerLineasDePagina() {
             const clonCuerpo = document.body.cloneNode(true);
             const chatCopia = clonCuerpo.querySelector('.chat-widget');
-            if (chatCopia) chatCopia.remove(); // Eliminamos el chat del clon para no leer los mensajes
+            if (chatCopia) chatCopia.remove(); // Ignora el texto del propio chat
             
-            return clonCuerpo.innerText.replace(/\s+/g, ' ').trim().toLowerCase();
+            // Divide el texto visible de la página en líneas separadas
+            return clonCuerpo.innerText.split('\n')
+                .map(linea => linea.trim())
+                .filter(linea => linea.length > 3); // Ignora líneas vacías o muy cortas
         }
 
-        // El cerebro dinámico
+        // El cerebro dinámico mejorado
         function getBotResponse(input) {
             const textoUsuario = input.toLowerCase().trim();
             
@@ -309,27 +312,19 @@
                 return "¡Hola! Hazme una pregunta y buscaré la respuesta en la página.";
             }
 
-            // Leemos la página justo en el momento en que el usuario pregunta
-            const baseDeDatosWeb = obtenerTextoDePagina();
-
-            // Dividimos lo que el usuario escribió en palabras clave
+            // Obtenemos las líneas de texto actualizadas
+            const lineasWeb = obtenerLineasDePagina();
             const palabrasClave = textoUsuario.split(" ").filter(p => p.length > 3);
             
-            // Buscamos las palabras clave en el texto de la página
+            // Buscamos si alguna palabra clave coincide con una línea de la web
             for (let palabra of palabrasClave) {
-                const indice = baseDeDatosWeb.indexOf(palabra);
+                const lineaEncontrada = lineasWeb.find(linea => linea.toLowerCase().includes(palabra));
                 
-                if (indice !== -1) {
-                    // Extrae un fragmento de texto alrededor de la coincidencia para dar contexto
-                    let inicio = Math.max(0, indice - 35);
-                    let fin = Math.min(baseDeDatosWeb.length, indice + 75);
-                    let extracto = baseDeDatosWeb.substring(inicio, fin);
-                    
-                    return `Según la página: "...${extracto.trim()}..."`;
+                if (lineaEncontrada) {
+                    return `En la página encontré esto: "${lineaEncontrada}"`;
                 }
             }
 
-            // Si no encuentra nada
             return "Lo siento, esa información no existe actualmente en esta página. Solo puedo responder en base a lo que se ve aquí.";
         }
 
@@ -341,10 +336,11 @@
             addMessage(text, 'user');
             chatInput.value = '';
 
+            // Pequeño retraso para que se sienta natural
             setTimeout(() => {
                 const response = getBotResponse(text);
                 addMessage(response, 'bot');
-            }, 600);
+            }, 500);
         }
 
         sendBtn.addEventListener('click', handleSend);
