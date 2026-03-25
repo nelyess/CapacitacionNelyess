@@ -343,7 +343,7 @@
                     let weekBalance = 0;
 
                     tableBody.innerHTML += `
-                        <tr class="bg-white/60">
+                        <tr class="bg-white/60" data-emp="${empleado}">
                             <td colspan="13" class="p-4 font-extrabold text-slate-800 text-xs uppercase tracking-wider border-b border-white/40">
                                 ${empleado} <span class="text-slate-500 font-medium ml-2">— ${semana}</span>
                             </td>
@@ -414,7 +414,7 @@
                         let balanceText = dailyBalance > 0 ? `+${dailyBalance} min` : `${dailyBalance} min`;
 
                         tableBody.innerHTML += `
-                            <tr class="hover:bg-white/40 border-b border-slate-300/30 transition-colors">
+                            <tr class="hover:bg-white/40 border-b border-slate-300/30 transition-colors" data-emp="${empleado}">
                                 <td class="p-3 text-slate-500 font-mono text-xs truncate max-w-[100px]" title="${record.sucursal}">${record.sucursal}</td>
                                 <td class="p-3 font-semibold text-slate-700 truncate max-w-[150px]" title="${record.nombre}">${record.nombre}</td>
                                 <td class="p-3 text-slate-600 font-medium">${record.dayName}</td>
@@ -437,7 +437,7 @@
                     let signForHours = weekBalance > 0 ? "+" : ""; 
 
                     tableBody.innerHTML += `
-                        <tr class="bg-slate-200/50 border-y border-slate-300 font-bold backdrop-blur-sm" data-ignore-pdf-styling="true">
+                        <tr class="bg-slate-200/50 border-y border-slate-300 font-bold backdrop-blur-sm" data-ignore-pdf-styling="true" data-emp="${empleado}">
                             <td colspan="8" class="p-4 text-right text-slate-800 uppercase tracking-wider text-xs">RESUMEN ${semana}</td>
                             <td class="p-4 text-center text-blue-800">${weekLunchMins > 0 ? formatMinsToHHMM(weekLunchMins) : '-'}</td>
                             <td class="p-4 text-center text-orange-700">${weekExcessLunch > 0 ? formatMinsToHHMM(weekExcessLunch) : '-'}</td>
@@ -463,7 +463,7 @@
                 let gSignForHours = grandTotalBalanceMins > 0 ? "+" : "";
 
                 tableBody.innerHTML += `
-                    <tr class="bg-slate-800 text-white font-bold text-sm" data-ignore-pdf-styling="true">
+                    <tr class="bg-slate-800 text-white font-bold text-sm" data-ignore-pdf-styling="true" data-emp="TOTAL">
                         <td colspan="8" class="p-5 text-right uppercase tracking-wider">TOTAL GENERAL DEL PERÍODO</td>
                         <td class="p-5 text-center text-blue-300">${grandTotalLunchMins > 0 ? formatMinsToHHMM(grandTotalLunchMins) : '-'}</td>
                         <td class="p-5 text-center text-orange-400">${grandTotalExcessLunch > 0 ? formatMinsToHHMM(grandTotalExcessLunch) : '-'}</td>
@@ -510,112 +510,116 @@
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('landscape', 'pt', 'a4'); 
 
-                    doc.setFontSize(14);
-                    doc.setFont("helvetica", "bold");
-                    doc.text("REPORTE OFICIAL DE ASISTENCIA Y CONTROL DE JORNADAS", doc.internal.pageSize.width / 2, 40, { align: "center" });
-
-                    doc.setFontSize(10);
-                    doc.setFont("helvetica", "normal");
-                    doc.text("EMISOR: INVERSIONES GENERALES NELYESS S.A.C.  |  RUC: 20603256698", 40, 65);
-                    
-                    let fechaActual = new Date();
-                    doc.text(`LUGAR Y FECHA DE EMISIÓN: Ayacucho, ${fechaActual.toLocaleDateString('es-PE')} a las ${fechaActual.toLocaleTimeString('es-PE')}`, 40, 80);
-
                     let tDias = document.getElementById('totalRecords').innerText.replace(/\n/g, ' ').trim();
                     let tHoras = document.getElementById('totalHours').innerText.trim();
                     let tExceso = document.getElementById('tardyLunch').innerText.replace(/\n/g, ' ').trim();
                     let tBalance = document.getElementById('globalBalance').innerText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                    
+                    let fechaActual = new Date();
+                    let fechaStr = `LUGAR Y FECHA DE EMISIÓN: Ayacucho, ${fechaActual.toLocaleDateString('es-PE')} a las ${fechaActual.toLocaleTimeString('es-PE')}`;
 
-                    doc.setFont("helvetica", "bold");
-                    doc.text(`RESUMEN GLOBAL:   Días Evaluados: ${tDias}   |   Horas Efectivas: ${tHoras}   |   Exceso Descanso: ${tExceso}   |   Balance: ${tBalance}`, 40, 105);
-
-                    doc.autoTable({
-                        html: '#mainTable',
-                        startY: 125,
-                        theme: 'grid',
-                        styles: { fontSize: 7, cellPadding: 4, halign: 'center', valign: 'middle', lineColor: [200, 200, 200] },
-                        headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold' },
-                        columnStyles: { 0: { halign: 'left' }, 1: { halign: 'left' } },
-                        didParseCell: function(data) {
-                            if (data.row.raw && data.row.raw.innerText) {
-                                let txt = data.row.raw.innerText.toUpperCase();
-                                if (txt.includes("RESUMEN")) {
-                                    data.cell.styles.fillColor = [226, 232, 240];
-                                    data.cell.styles.textColor = [15, 23, 42];
-                                    data.cell.styles.fontStyle = 'bold';
-                                }
-                                if (txt.includes("TOTAL GENERAL")) {
-                                    data.cell.styles.fillColor = [15, 23, 42];
-                                    data.cell.styles.textColor = 255;
-                                    data.cell.styles.fontStyle = 'bold';
-                                }
-                            }
+                    // Extraer los trabajadores únicos del HTML usando los data-attributes agregados
+                    let empNames = [];
+                    document.querySelectorAll('#tableBody tr[data-emp]').forEach(tr => {
+                        let emp = tr.getAttribute('data-emp');
+                        if (emp && emp !== "TOTAL" && !empNames.includes(emp)) {
+                            empNames.push(emp);
                         }
                     });
 
-                    let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 50 : 150; 
-                    
-                    let uniqueEmpSet = new Set();
-                    document.querySelectorAll('#tableBody tr').forEach(tr => {
-                        if (tr.cells.length > 2) {
-                            let empCell = tr.cells[1];
-                            if(empCell && empCell.innerText) {
-                                 let text = tr.innerText.toUpperCase();
-                                 if (!text.includes("RESUMEN") && !text.includes("TOTAL GENERAL") && !text.includes("SUBE TU ARCHIVO")) {
-                                     uniqueEmpSet.add(empCell.innerText.trim());
-                                 }
-                            }
-                        }
-                    });
-                    
-                    let empleadosAImprimir = Array.from(uniqueEmpSet);
-                    let pageWidth = doc.internal.pageSize.width;
-                    let signatureWidth = 200;
-                    let marginX = 40;
-                    let gapX = (pageWidth - (2 * marginX) - (3 * signatureWidth)) / 2; 
-
-                    let currentX = marginX;
-                    let currentY = finalY;
-
-                    if (currentY + 100 > doc.internal.pageSize.height - 40) {
-                        doc.addPage();
-                        currentY = 60;
+                    if (empNames.length === 0) {
+                        alert("No hay datos para exportar.");
+                        return;
                     }
 
-                    doc.setFontSize(11);
-                    doc.setFont("helvetica", "bold");
-                    doc.text("FIRMAS DE CONFORMIDAD DEL TRABAJADOR", pageWidth / 2, currentY, { align: "center" });
-                    
-                    currentY += 60;
-
-                    empleadosAImprimir.forEach((emp, index) => {
-                        if (currentX + signatureWidth > pageWidth - marginX + 10) {
-                            currentX = marginX;
-                            currentY += 100; 
-                            
-                            if (currentY + 80 > doc.internal.pageSize.height - 40) {
-                                doc.addPage();
-                                currentY = 60;
-                            }
+                    // Iterar por trabajador para armar hojas separadas
+                    empNames.forEach((emp, index) => {
+                        if (index > 0) {
+                            doc.addPage();
                         }
+
+                        // Cabeceras repetitivas por cada hoja
+                        doc.setFontSize(14);
+                        doc.setFont("helvetica", "bold");
+                        doc.text("REPORTE OFICIAL DE ASISTENCIA Y CONTROL DE JORNADAS", doc.internal.pageSize.width / 2, 40, { align: "center" });
+
+                        doc.setFontSize(10);
+                        doc.setFont("helvetica", "normal");
+                        doc.text("EMISOR: INVERSIONES GENERALES NELYESS S.A.C.  |  RUC: 20603256698", 40, 65);
+                        doc.text(fechaStr, 40, 80);
+
+                        doc.setFont("helvetica", "bold");
+                        doc.text(`RESUMEN GLOBAL:   Días Evaluados: ${tDias}   |   Horas Efectivas: ${tHoras}   |   Exceso Descanso: ${tExceso}   |   Balance: ${tBalance}`, 40, 105);
+
+                        // Crear la estructura HTML temporal SOLO para el empleado en curso
+                        let tempTable = document.createElement('table');
+                        tempTable.appendChild(document.querySelector('#mainTable thead').cloneNode(true));
+                        let tempBody = document.createElement('tbody');
+                        
+                        document.querySelectorAll(`#tableBody tr[data-emp="${emp}"]`).forEach(tr => {
+                            tempBody.appendChild(tr.cloneNode(true));
+                        });
+
+                        // Agregar el Gran Total al final de la última persona en imprimir
+                        if (index === empNames.length - 1) {
+                            let trTotal = document.querySelector('#tableBody tr[data-emp="TOTAL"]');
+                            if (trTotal) tempBody.appendChild(trTotal.cloneNode(true));
+                        }
+                        tempTable.appendChild(tempBody);
+
+                        doc.autoTable({
+                            html: tempTable,
+                            startY: 125,
+                            theme: 'grid',
+                            styles: { fontSize: 7, cellPadding: 4, halign: 'center', valign: 'middle', lineColor: [200, 200, 200] },
+                            headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold' },
+                            columnStyles: { 0: { halign: 'left' }, 1: { halign: 'left' } },
+                            didParseCell: function(data) {
+                                if (data.row.raw && data.row.raw.textContent) {
+                                    let txt = data.row.raw.textContent.toUpperCase();
+                                    if (txt.includes("RESUMEN")) {
+                                        // Coloración resaltada para el resumen semanal como solicitaste
+                                        data.cell.styles.fillColor = [254, 240, 138]; // Tono amarillo pastel muy notorio
+                                        data.cell.styles.textColor = [15, 23, 42]; // Letra oscura
+                                        data.cell.styles.fontStyle = 'bold';
+                                    }
+                                    if (txt.includes("TOTAL GENERAL")) {
+                                        data.cell.styles.fillColor = [15, 23, 42];
+                                        data.cell.styles.textColor = 255;
+                                        data.cell.styles.fontStyle = 'bold';
+                                    }
+                                }
+                            }
+                        });
+
+                        // Colocar la línea de firma enfocada en ese único trabajador
+                        let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 50 : 150; 
+                        
+                        // Si la firma no entra en la página, pasarlo a la siguiente
+                        if (finalY + 80 > doc.internal.pageSize.height - 40) {
+                            doc.addPage();
+                            finalY = 60;
+                        }
+
+                        let pageWidth = doc.internal.pageSize.width;
+                        let signatureWidth = 200;
+                        let currentX = (pageWidth - signatureWidth) / 2; // Firma siempre centrada al final de SU hoja
 
                         doc.setDrawColor(0);
                         doc.setLineWidth(1);
-                        doc.line(currentX, currentY, currentX + signatureWidth, currentY);
+                        doc.line(currentX, finalY, currentX + signatureWidth, finalY);
 
                         doc.setFontSize(9);
                         doc.setFont("helvetica", "bold");
-                        doc.text(emp.toUpperCase(), currentX + (signatureWidth/2), currentY + 15, { align: "center" });
+                        doc.text(emp.toUpperCase(), currentX + (signatureWidth/2), finalY + 15, { align: "center" });
                         
                         doc.setFont("helvetica", "normal");
                         doc.setTextColor(80, 80, 80);
-                        doc.text("Firma del Trabajador", currentX + (signatureWidth/2), currentY + 28, { align: "center" });
+                        doc.text("Firma del Trabajador", currentX + (signatureWidth/2), finalY + 28, { align: "center" });
 
                         doc.setFont("helvetica", "bold");
-                        doc.text("DNI: ____________________", currentX + (signatureWidth/2), currentY + 45, { align: "center" });
+                        doc.text("DNI: ____________________", currentX + (signatureWidth/2), finalY + 45, { align: "center" });
                         doc.setTextColor(0, 0, 0); 
-
-                        currentX += signatureWidth + gapX;
                     });
 
                     doc.save('Reporte_Oficial_Asistencia.pdf');
