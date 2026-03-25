@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Control de Asistencia Excel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body class="bg-slate-50 p-6 md:p-10 font-sans text-slate-800">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-6">Control de Asistencia - Análisis de Jornada Real</h1>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            
+            <div class="col-span-1 md:col-span-3 border-b border-slate-100 pb-4">
+                <label class="block text-sm font-bold text-slate-700 mb-2">1. Subir Reporte(s) Excel</label>
+                <input type="file" id="excelUpload" multiple accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer border border-slate-300 rounded-md">
+                <p id="statusText" class="text-xs text-green-600 mt-2 font-medium hidden">Procesando todas las hojas, por favor espera...</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">2. Sucursal</label>
+                <select id="sucursalSelect" class="w-full border border-slate-300 p-2.5 rounded-md bg-slate-50 focus:ring-green-500 focus:border-green-500 disabled:opacity-50" disabled>
+                    <option value="ALL">Todas las Sucursales</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">3. Empleado (Usa Ctrl para varios)</label>
+                <select id="agenteSelect" multiple size="4" class="w-full border border-slate-300 p-2 rounded-md bg-slate-50 focus:ring-green-500 focus:border-green-500 disabled:opacity-50" disabled>
+                    <option value="">Esperando reporte...</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">4. Fecha</label>
+                <select id="fechaSelect" class="w-full border border-slate-300 p-2.5 rounded-md bg-slate-50 focus:ring-green-500 focus:border-green-500 disabled:opacity-50" disabled>
+                    <option value="ALL">Todas las Fechas</option>
+                </select>
+            </div>
+
+            <div class="col-span-1 md:col-span-3 flex justify-end space-x-4">
+                <button id="processBtn" class="bg-green-600 text-white px-8 py-3 rounded-lg font-bold shadow-md hover:bg-green-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors" disabled>
+                    Generar Análisis
+                </button>
+                <button id="exportPdfBtn" class="hidden bg-red-600 text-white px-8 py-3 rounded-lg font-bold shadow-md hover:bg-red-700 transition-colors">
+                    Exportar PDF Oficial
+                </button>
+            </div>
+        </div>
+
+        <div id="reportContainer" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-slate-50 p-6 rounded-xl border-l-4 border-l-slate-500 border border-slate-200">
+                    <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider">Días Evaluados</h3>
+                    <p id="totalRecords" class="text-3xl font-black text-slate-800 mt-1">0 <span class="text-sm font-normal">días</span></p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border-l-4 border-l-green-500 border border-slate-200">
+                    <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Trabajado</h3>
+                    <p id="totalHours" class="text-3xl font-black text-slate-800 mt-1">0h 00m</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border-l-4 border-l-orange-500 border border-slate-200">
+                    <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider">Exceso Descanso</h3>
+                    <p id="tardyLunch" class="text-3xl font-black text-slate-800 mt-1">0 <span class="text-sm font-normal">min</span></p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border-l-4 border-l-blue-500 border border-slate-200">
+                    <h3 class="text-slate-500 text-xs font-bold uppercase tracking-wider">Balance Global</h3>
+                    <p id="globalBalance" class="text-2xl font-black text-slate-800 mt-1 leading-tight">0 <span class="text-sm font-normal">min</span></p>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto mb-8">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">Detalle y Resumen Semanal</h3>
+                <table id="mainTable" class="w-full text-left border-collapse text-sm whitespace-nowrap">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b-2 border-slate-200">
+                            <th class="p-3 font-semibold">Sucursal</th>
+                            <th class="p-3 font-semibold">Trabajador</th>
+                            <th class="p-3 font-semibold">Día</th>
+                            <th class="p-3 font-semibold border-r border-slate-200">Fecha</th>
+                            <th class="p-3 font-semibold text-center text-green-700">Entrada</th>
+                            <th class="p-3 font-semibold text-center text-slate-500 bg-slate-50">Ini. Descanso</th>
+                            <th class="p-3 font-semibold text-center text-slate-500 bg-slate-50">Fin Descanso</th>
+                            <th class="p-3 font-semibold text-center text-green-700 border-r border-slate-200">Salida</th>
+                            <th class="p-3 font-semibold text-center text-blue-600 bg-blue-50">Descanso Usado</th>
+                            <th class="p-3 font-semibold text-center text-orange-600">Exceso Desc.</th>
+                            <th class="p-3 font-semibold text-center">Efectivas</th>
+                            <th class="p-3 font-semibold text-center">Meta</th>
+                            <th class="p-3 font-semibold text-center">Balance (Día)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="13" class="p-6 text-center text-slate-400 italic">Sube tu archivo de Excel para ver el detalle.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="signatureContainer" class="pt-8 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-12 hidden">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        let masterData = []; 
+        const currentYear = new Date().getFullYear();
+
+        const uploadInput = document.getElementById('excelUpload');
+        const sucursalSelect = document.getElementById('sucursalSelect');
+        const agenteSelect = document.getElementById('agenteSelect');
+        const fechaSelect = document.getElementById('fechaSelect');
+        const processBtn = document.getElementById('processBtn');
+        const statusText = document.getElementById('statusText');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+
+        function formatMinsToHHMM(mins) {
+            let isNegative = mins < 0;
+            let absMins = Math.abs(mins);
+            let h = Math.floor(absMins / 60);
+            let m = Math.round(absMins % 60);
+            let sign = isNegative ? "-" : "";
+            return `${sign}${h}h ${m.toString().padStart(2, '0')}m`;
+        }
+
+        function extractTime(cellValue) {
+            if (!cellValue) return "-";
+            const match = String(cellValue).match(/\b\d{1,2}:\d{2}\b/);
+            return match ? match[0] : "-";
+        }
+
+        function parseDateInfo(ddmm) {
+            let [d, m] = ddmm.split('/');
+            let dateObj = new Date(currentYear, parseInt(m) - 1, parseInt(d));
+            let days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            
+            let dayOfWeek = dateObj.getDay();
+            let diff = dateObj.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); 
+            let mondayOfWeek = new Date(dateObj.setDate(diff));
+            let weekKey = `Semana del ${mondayOfWeek.getDate().toString().padStart(2, '0')}/${(mondayOfWeek.getMonth()+1).toString().padStart(2, '0')}`;
+
+            return {
+                dayName: days[dayOfWeek],
+                dayIndex: dayOfWeek,
+                weekKey: weekKey,
+                rawDateObj: new Date(currentYear, parseInt(m) - 1, parseInt(d)) 
+            };
+        }
+
+        uploadInput.addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+
+            statusText.classList.remove('hidden');
+            processBtn.disabled = true;
+            sucursalSelect.disabled = true;
+            agenteSelect.disabled = true;
+            fechaSelect.disabled = true;
+            exportPdfBtn.classList.add('hidden');
+            masterData = [];
+
+            try {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const data = await file.arrayBuffer();
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    for (let s = 0; s < workbook.SheetNames.length; s++) {
+                        const sheetName = workbook.SheetNames[s];
+                        const worksheet = workbook.Sheets[sheetName];
+                        const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
+
+                        let currentSucursal = "DESCONOCIDA";
+                        let currentName = "DESCONOCIDO";
+
+                        for (let r = 0; r < rows.length; r++) {
+                            let row = rows[r];
+                            if (!row || row.length === 0) continue;
+
+                            let rowStr = row.filter(cell => cell !== undefined && cell !== null && cell !== '').join('|');
+                            
+                            let nombreMatch = rowStr.match(/Nombre:\|([^\|]+)/i);
+                            if (nombreMatch) {
+                                currentName = nombreMatch[1].trim();
+                            }
+
+                            let sucMatch = rowStr.match(/Sucursal:\s*\|([^\|]+)/i) || rowStr.match(/Sucursal:([^\|]+)/i);
+                            if (sucMatch) {
+                                currentSucursal = sucMatch[1].trim();
+                            }
+
+                            let dateStr = String(row[0] || "");
+                            let dateMatch = dateStr.match(/(\d{2}\/\d{2})/);
+                            
+                            if (dateMatch && !rowStr.includes('HORARIO')) {
+                                let date = dateMatch[1];
+                                let dateInfo = parseDateInfo(date);
+                                
+                                let timeEntrada = extractTime(row[3]);
+                                let timeInicioDescanso = extractTime(row[4]);
+                                let timeFinDescanso = extractTime(row[5]);
+                                let timeSalida = extractTime(row[6]);
+
+                                if (timeEntrada !== "-" || timeSalida !== "-" || timeInicioDescanso !== "-" || timeFinDescanso !== "-") {
+                                    masterData.push({
+                                        sucursal: currentSucursal,
+                                        nombre: currentName,
+                                        fecha: date,
+                                        dayName: dateInfo.dayName,
+                                        dayIndex: dateInfo.dayIndex,
+                                        weekKey: dateInfo.weekKey,
+                                        rawDateObj: dateInfo.rawDateObj,
+                                        entrada: timeEntrada,
+                                        inicioDescanso: timeInicioDescanso,
+                                        finDescanso: timeFinDescanso,
+                                        salida: timeSalida
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                populateFilters();
+            } catch (error) {
+                alert("Error al leer el Excel. Verifica que el archivo no esté dañado.");
+                console.error(error);
+            } finally {
+                statusText.classList.add('hidden');
+            }
+        });
+
+        function populateFilters() {
+            let sucursales = [...new Set(masterData.map(d => d.sucursal))].sort();
+            let fechas = [...new Set(masterData.map(d => d.fecha))].sort();
+            
+            sucursalSelect.innerHTML = '<option value="ALL">Todas las Sucursales</option>';
+            sucursales.forEach(suc => {
+                sucursalSelect.innerHTML += `<option value="${suc}">${suc}</option>`;
+            });
+
+            fechaSelect.innerHTML = '<option value="ALL">Todas las Fechas</option>';
+            fechas.forEach(f => {
+                fechaSelect.innerHTML += `<option value="${f}">${f}</option>`;
+            });
+
+            updateAgentes();
+            sucursalSelect.disabled = false;
+            agenteSelect.disabled = false;
+            fechaSelect.disabled = false;
+            processBtn.disabled = false;
+        }
+
+        function updateAgentes() {
+            let selectedSuc = sucursalSelect.value;
+            let filteredData = selectedSuc === "ALL" ? masterData : masterData.filter(d => d.sucursal === selectedSuc);
+            
+            let uniqueAgents = [...new Set(filteredData.map(d => d.nombre))].sort();
+            
+            agenteSelect.innerHTML = '';
+            uniqueAgents.forEach(agent => {
+                let opt = document.createElement('option');
+                opt.value = agent; 
+                opt.textContent = agent;
+                opt.selected = true; 
+                agenteSelect.appendChild(opt);
+            });
+        }
+
+        sucursalSelect.addEventListener('change', updateAgentes);
+
+        function timeToMinutes(timeStr) {
+            if(!timeStr || timeStr === "-") return 0;
+            let [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        processBtn.addEventListener('click', () => {
+            const selectedSuc = sucursalSelect.value;
+            const selectedAgents = Array.from(agenteSelect.selectedOptions).map(opt => opt.value);
+            const selectedFecha = fechaSelect.value;
+
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            let filteredData = masterData.filter(record => {
+                let matchSuc = selectedSuc === "ALL" || record.sucursal === selectedSuc;
+                let matchAgent = selectedAgents.includes(record.nombre);
+                let matchFecha = selectedFecha === "ALL" || record.fecha === selectedFecha;
+                return matchSuc && matchAgent && matchFecha;
+            });
+
+            filteredData.sort((a, b) => {
+                if(a.nombre < b.nombre) return -1;
+                if(a.nombre > b.nombre) return 1;
+                return a.rawDateObj - b.rawDateObj;
+            });
+
+            let groupedData = {};
+            filteredData.forEach(record => {
+                if (!groupedData[record.nombre]) groupedData[record.nombre] = {};
+                if (!groupedData[record.nombre][record.weekKey]) groupedData[record.nombre][record.weekKey] = [];
+                groupedData[record.nombre][record.weekKey].push(record);
+            });
+
+            let grandTotalDays = 0;
+            let grandTotalLunchMins = 0;
+            let grandTotalExcessLunch = 0;
+            let grandTotalWorkedMins = 0;
+            let grandTotalTargetMins = 0;
+            let grandTotalBalanceMins = 0;
+
+            for (let empleado in groupedData) {
+                for (let semana in groupedData[empleado]) {
+                    
+                    let weekRecords = groupedData[empleado][semana];
+                    let weekWorkedMins = 0;
+                    let weekTargetMins = 0;
+                    let weekLunchMins = 0;
+                    let weekExcessLunch = 0;
+                    let weekBalance = 0;
+
+                    tableBody.innerHTML += `
+                        <tr class="bg-slate-200/50">
+                            <td colspan="13" class="p-3 font-bold text-slate-700 text-xs uppercase tracking-wide">
+                                ${empleado} - ${semana}
+                            </td>
+                        </tr>
+                    `;
+
+                    weekRecords.forEach(record => {
+                        grandTotalDays++;
+                        
+                        let minEntrada = timeToMinutes(record.entrada);
+                        let minInicioDescanso = timeToMinutes(record.inicioDescanso);
+                        let minFinDescanso = timeToMinutes(record.finDescanso);
+                        let minSalida = timeToMinutes(record.salida);
+
+                        let lunchTime = 0;
+                        let excessLunch = 0;
+                        let workedMins = 0;
+                        let targetMins = 540; 
+
+                        if (record.dayIndex === 6) targetMins = 360; 
+                        if (record.dayIndex === 0) targetMins = 480; 
+
+                        // DETECCIÓN DE MEDIO TIEMPO
+                        if (record.entrada !== "-" && record.inicioDescanso !== "-" && record.finDescanso === "-" && record.salida === "-") {
+                            targetMins = (record.dayIndex === 0) ? 480 : 300; // 8h domingo, 5h resto
+                            workedMins = minInicioDescanso - minEntrada;
+                            if (workedMins < 0) workedMins += 24 * 60;
+                        } 
+                        // LÓGICA NORMAL
+                        else {
+                            if (record.dayIndex === 6 || record.dayIndex === 0) {
+                                if (record.entrada !== "-" && record.salida !== "-") {
+                                    workedMins = minSalida - minEntrada;
+                                    if (workedMins < 0) workedMins += 24 * 60;
+                                }
+                            } else {
+                                if (record.inicioDescanso !== "-" && record.finDescanso !== "-") {
+                                    lunchTime = minFinDescanso - minInicioDescanso;
+                                    if (lunchTime < 0) lunchTime += 24 * 60; 
+                                    if (lunchTime > 120) excessLunch = lunchTime - 120;
+                                }
+
+                                if (record.entrada !== "-" && record.salida !== "-") {
+                                    if (record.inicioDescanso !== "-" && record.finDescanso !== "-") {
+                                        let amBlock = minInicioDescanso - minEntrada;
+                                        let pmBlock = minSalida - minFinDescanso;
+                                        if (amBlock < 0) amBlock += 24 * 60;
+                                        if (pmBlock < 0) pmBlock += 24 * 60;
+                                        workedMins = (amBlock > 0 ? amBlock : 0) + (pmBlock > 0 ? pmBlock : 0);
+                                    } else {
+                                        workedMins = minSalida - minEntrada;
+                                        if (workedMins < 0) workedMins += 24 * 60;
+                                    }
+                                }
+                            }
+                        }
+
+                        let dailyBalance = 0;
+                        if(workedMins > 0) {
+                            dailyBalance = workedMins - targetMins;
+                            weekTargetMins += targetMins;
+                        }
+
+                        weekLunchMins += lunchTime;
+                        weekWorkedMins += workedMins;
+                        weekExcessLunch += excessLunch;
+                        weekBalance += dailyBalance;
+
+                        let balanceClass = dailyBalance > 0 ? 'text-green-600 font-bold' : (dailyBalance < 0 ? 'text-red-500 font-bold' : 'text-slate-500');
+                        let balanceText = dailyBalance > 0 ? `+${dailyBalance} min` : `${dailyBalance} min`;
+
+                        tableBody.innerHTML += `
+                            <tr class="hover:bg-slate-100 border-b border-slate-100 transition-colors">
+                                <td class="p-3 text-slate-500 font-mono text-xs truncate max-w-[100px]" title="${record.sucursal}">${record.sucursal}</td>
+                                <td class="p-3 font-semibold text-slate-700 truncate max-w-[150px]" title="${record.nombre}">${record.nombre}</td>
+                                <td class="p-3 text-slate-600 font-medium">${record.dayName}</td>
+                                <td class="p-3 text-slate-600 border-r border-slate-200">${record.fecha}</td>
+                                <td class="p-3 text-center font-mono font-medium ${record.entrada !== '-' ? 'text-green-700' : 'text-slate-300'}">${record.entrada}</td>
+                                <td class="p-3 text-center font-mono text-slate-500 bg-slate-50">${record.inicioDescanso !== '-' ? record.inicioDescanso : '-'}</td>
+                                <td class="p-3 text-center font-mono text-slate-500 bg-slate-50">${record.finDescanso !== '-' ? record.finDescanso : '-'}</td>
+                                <td class="p-3 text-center font-mono font-medium border-r border-slate-200 ${record.salida !== '-' ? 'text-green-700' : 'text-slate-300'}">${record.salida}</td>
+                                <td class="p-3 text-center text-blue-700 bg-blue-50 font-medium">${lunchTime > 0 ? lunchTime + ' min' : '-'}</td>
+                                <td class="p-3 text-center ${excessLunch > 0 ? 'text-orange-600 font-bold bg-orange-50' : 'text-slate-400'}">${excessLunch > 0 ? excessLunch + ' min' : '-'}</td>
+                                <td class="p-3 text-center font-bold text-slate-800">${formatMinsToHHMM(workedMins)}</td>
+                                <td class="p-3 text-center text-slate-500">${formatMinsToHHMM(targetMins)}</td>
+                                <td class="p-3 text-center ${balanceClass}">${workedMins > 0 ? balanceText : '-'}</td>
+                            </tr>
+                        `;
+                    });
+
+                    let weekBalanceClass = weekBalance > 0 ? 'text-green-700' : (weekBalance < 0 ? 'text-red-600' : 'text-slate-700');
+                    let weekBalanceTextMins = weekBalance > 0 ? `+${weekBalance} min` : `${weekBalance} min`;
+                    let signForHours = weekBalance > 0 ? "+" : ""; 
+
+                    tableBody.innerHTML += `
+                        <tr class="bg-slate-200 border-y-2 border-slate-400 font-bold" data-ignore-pdf-styling="true">
+                            <td colspan="8" class="p-3 text-right text-slate-800 uppercase tracking-wider">RESUMEN ${semana}</td>
+                            <td class="p-3 text-center text-blue-800">${weekLunchMins > 0 ? formatMinsToHHMM(weekLunchMins) : '-'}</td>
+                            <td class="p-3 text-center text-orange-700">${weekExcessLunch > 0 ? formatMinsToHHMM(weekExcessLunch) : '-'}</td>
+                            <td class="p-3 text-center text-slate-800">${formatMinsToHHMM(weekWorkedMins)}</td>
+                            <td class="p-3 text-center text-slate-600">${formatMinsToHHMM(weekTargetMins)}</td>
+                            <td class="p-3 text-center ${weekBalanceClass} leading-tight">
+                                ${weekBalanceTextMins} <span class="text-xs opacity-75">(${signForHours}${formatMinsToHHMM(weekBalance)})</span>
+                            </td>
+                        </tr>
+                    `;
+
+                    grandTotalLunchMins += weekLunchMins;
+                    grandTotalExcessLunch += weekExcessLunch;
+                    grandTotalWorkedMins += weekWorkedMins;
+                    grandTotalTargetMins += weekTargetMins;
+                    grandTotalBalanceMins += weekBalance;
+                }
+            }
+
+            if (filteredData.length > 0) {
+                let gBalanceClass = grandTotalBalanceMins > 0 ? 'text-green-400' : (grandTotalBalanceMins < 0 ? 'text-red-400' : 'text-white');
+                let gBalanceMins = grandTotalBalanceMins > 0 ? `+${grandTotalBalanceMins} min` : `${grandTotalBalanceMins} min`;
+                let gSignForHours = grandTotalBalanceMins > 0 ? "+" : "";
+
+                tableBody.innerHTML += `
+                    <tr class="bg-slate-900 text-white font-bold text-sm" data-ignore-pdf-styling="true">
+                        <td colspan="8" class="p-4 text-right uppercase tracking-wider">TOTAL GENERAL DEL PERÍODO</td>
+                        <td class="p-4 text-center text-blue-300">${grandTotalLunchMins > 0 ? formatMinsToHHMM(grandTotalLunchMins) : '-'}</td>
+                        <td class="p-4 text-center text-orange-400">${grandTotalExcessLunch > 0 ? formatMinsToHHMM(grandTotalExcessLunch) : '-'}</td>
+                        <td class="p-4 text-center">${formatMinsToHHMM(grandTotalWorkedMins)}</td>
+                        <td class="p-4 text-center opacity-80">${formatMinsToHHMM(grandTotalTargetMins)}</td>
+                        <td class="p-4 text-center ${gBalanceClass} leading-tight">
+                            ${gBalanceMins} <span class="text-xs font-normal opacity-80">(${gSignForHours}${formatMinsToHHMM(grandTotalBalanceMins)})</span>
+                        </td>
+                    </tr>
+                `;
+
+                exportPdfBtn.classList.remove('hidden');
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="13" class="p-6 text-center text-slate-400 italic">No hay datos para los filtros seleccionados.</td></tr>`;
+                exportPdfBtn.classList.add('hidden');
+            }
+
+            document.getElementById('totalRecords').innerHTML = `${grandTotalDays} <span class="text-sm font-normal text-slate-500">días</span>`;
+            document.getElementById('tardyLunch').innerHTML = `${grandTotalExcessLunch} <span class="text-sm font-normal text-slate-500">min</span>`;
+            document.getElementById('totalHours').innerHTML = `${formatMinsToHHMM(grandTotalWorkedMins)}`;
+            
+            let gbClass = grandTotalBalanceMins > 0 ? 'text-green-600' : (grandTotalBalanceMins < 0 ? 'text-red-500' : 'text-slate-800');
+            let gbTextMins = grandTotalBalanceMins > 0 ? `+${grandTotalBalanceMins}` : `${grandTotalBalanceMins}`;
+            let gbSignHour = grandTotalBalanceMins > 0 ? "+" : "";
+
+            document.getElementById('globalBalance').className = `text-2xl font-black mt-1 leading-tight ${gbClass}`;
+            document.getElementById('globalBalance').innerHTML = `
+                ${gbTextMins} <span class="text-sm font-normal text-slate-500">min</span><br>
+                <span class="text-lg font-bold opacity-80">(${gbSignHour}${formatMinsToHHMM(grandTotalBalanceMins)})</span>
+            `;
+        });
+
+        // --- MOTOR DE EXPORTACIÓN ROBUSTO (Vectorial y seguro) ---
+        exportPdfBtn.addEventListener('click', () => {
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+                alert("Las librerías para el PDF aún se están cargando o hubo un error de red. Espera un momento o recarga la página.");
+                return;
+            }
+
+            exportPdfBtn.innerText = "Procesando Documento...";
+            exportPdfBtn.disabled = true;
+
+            setTimeout(() => {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('landscape', 'pt', 'a4'); 
+
+                    // 1. Cabecera Oficial y Datos del Emisor Actualizados
+                    doc.setFontSize(14);
+                    doc.setFont("helvetica", "bold");
+                    doc.text("REPORTE OFICIAL DE ASISTENCIA Y CONTROL DE JORNADAS", doc.internal.pageSize.width / 2, 40, { align: "center" });
+
+                    doc.setFontSize(10);
+                    doc.setFont("helvetica", "normal");
+                    doc.text("EMISOR: INVERSIONES GENERALES NELYESS S.A.C.  |  RUC: 20603256698", 40, 65);
+                    
+                    let fechaActual = new Date();
+                    doc.text(`LUGAR Y FECHA DE EMISIÓN: Ayacucho, ${fechaActual.toLocaleDateString('es-PE')} a las ${fechaActual.toLocaleTimeString('es-PE')}`, 40, 80);
+
+                    // 2. Extraer Resumen Global
+                    let tDias = document.getElementById('totalRecords').innerText.replace(/\n/g, ' ').trim();
+                    let tHoras = document.getElementById('totalHours').innerText.trim();
+                    let tExceso = document.getElementById('tardyLunch').innerText.replace(/\n/g, ' ').trim();
+                    let tBalance = document.getElementById('globalBalance').innerText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+                    doc.setFont("helvetica", "bold");
+                    doc.text(`RESUMEN GLOBAL:   Días Evaluados: ${tDias}   |   Horas Efectivas: ${tHoras}   |   Exceso Descanso: ${tExceso}   |   Balance: ${tBalance}`, 40, 105);
+
+                    // 3. Generar la Tabla Automáticamente en el PDF
+                    doc.autoTable({
+                        html: '#mainTable',
+                        startY: 125,
+                        theme: 'grid',
+                        styles: { fontSize: 7, cellPadding: 4, halign: 'center', valign: 'middle', lineColor: [200, 200, 200] },
+                        headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold' },
+                        columnStyles: {
+                            0: { halign: 'left' }, 
+                            1: { halign: 'left' }, 
+                        },
+                        didParseCell: function(data) {
+                            if (data.row.raw && data.row.raw.innerText) {
+                                let txt = data.row.raw.innerText.toUpperCase();
+                                if (txt.includes("RESUMEN")) {
+                                    data.cell.styles.fillColor = [226, 232, 240];
+                                    data.cell.styles.textColor = [15, 23, 42];
+                                    data.cell.styles.fontStyle = 'bold';
+                                }
+                                if (txt.includes("TOTAL GENERAL")) {
+                                    data.cell.styles.fillColor = [15, 23, 42];
+                                    data.cell.styles.textColor = 255;
+                                    data.cell.styles.fontStyle = 'bold';
+                                }
+                            }
+                        }
+                    });
+
+                    // 4. Sección de Firmas de los Trabajadores
+                    let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 50 : 150; 
+                    
+                    let uniqueEmpSet = new Set();
+                    document.querySelectorAll('#tableBody tr').forEach(tr => {
+                        if (tr.cells.length > 2) {
+                            let empCell = tr.cells[1];
+                            if(empCell && empCell.innerText) {
+                                 let text = tr.innerText.toUpperCase();
+                                 if (!text.includes("RESUMEN") && !text.includes("TOTAL GENERAL") && !text.includes("SUBE TU ARCHIVO")) {
+                                     uniqueEmpSet.add(empCell.innerText.trim());
+                                 }
+                            }
+                        }
+                    });
+                    
+                    let empleadosAImprimir = Array.from(uniqueEmpSet);
+                    let pageWidth = doc.internal.pageSize.width;
+                    let signatureWidth = 200;
+                    let marginX = 40;
+                    let gapX = (pageWidth - (2 * marginX) - (3 * signatureWidth)) / 2; 
+
+                    let currentX = marginX;
+                    let currentY = finalY;
+
+                    if (currentY + 100 > doc.internal.pageSize.height - 40) {
+                        doc.addPage();
+                        currentY = 60;
+                    }
+
+                    doc.setFontSize(11);
+                    doc.setFont("helvetica", "bold");
+                    doc.text("FIRMAS DE CONFORMIDAD DEL TRABAJADOR", pageWidth / 2, currentY, { align: "center" });
+                    
+                    currentY += 60;
+
+                    empleadosAImprimir.forEach((emp, index) => {
+                        if (currentX + signatureWidth > pageWidth - marginX + 10) {
+                            currentX = marginX;
+                            currentY += 100; 
+                            
+                            if (currentY + 80 > doc.internal.pageSize.height - 40) {
+                                doc.addPage();
+                                currentY = 60;
+                            }
+                        }
+
+                        doc.setDrawColor(0);
+                        doc.setLineWidth(1);
+                        doc.line(currentX, currentY, currentX + signatureWidth, currentY);
+
+                        doc.setFontSize(9);
+                        doc.setFont("helvetica", "bold");
+                        doc.text(emp.toUpperCase(), currentX + (signatureWidth/2), currentY + 15, { align: "center" });
+                        
+                        doc.setFont("helvetica", "normal");
+                        doc.setTextColor(80, 80, 80);
+                        doc.text("Firma del Trabajador", currentX + (signatureWidth/2), currentY + 28, { align: "center" });
+
+                        doc.setFont("helvetica", "bold");
+                        doc.text("DNI: ____________________", currentX + (signatureWidth/2), currentY + 45, { align: "center" });
+                        doc.setTextColor(0, 0, 0); 
+
+                        currentX += signatureWidth + gapX;
+                    });
+
+                    // 5. Descargar el archivo final
+                    doc.save('Reporte_Oficial_Asistencia.pdf');
+
+                } catch (error) {
+                    console.error("Error creando el PDF: ", error);
+                    alert("Ocurrió un error al procesar el PDF. Asegúrate de tener datos en la tabla e inténtalo de nuevo.");
+                } finally {
+                    exportPdfBtn.innerText = "Exportar PDF Oficial";
+                    exportPdfBtn.disabled = false;
+                }
+            }, 300); 
+        });
+
+    </script>
+</body>
+</html>
